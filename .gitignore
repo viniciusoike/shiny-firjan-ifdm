@@ -37,3 +37,10 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+data-raw/Evolu__o do IFDM Educa__o - 2005 a 2016.xlsx
+data-raw/Evolu__o do IFDM EmpregoRenda - 2005 a 2016.xlsx
+data-raw/Evolu__o do IFDM Geral - 2005 a 2016.xlsx
+data-raw/Evolu__o do IFDM Sa_de - 2005 a 2016.xlsx
+data/firjan_hdi.csv
+data/firjan_hdi.gpkg
+data/shape_muni.gpkg
