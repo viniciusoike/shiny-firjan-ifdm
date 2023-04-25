@@ -19,10 +19,14 @@ city_list <- unique(cities$name_muni_full)
 # Map data
 firjan_full <- readr::read_rds("data/firjan_wide.rds")
 firjan_full <- firjan_full |>
-  dplyr::mutate(
-    code_region = as.numeric(substring(code_muni, 1, 1)),
-    code_state  = as.numeric(substring(code_muni, 1, 2))
-  )
+  dplyr::select(-name_muni_full) |>
+  dplyr::left_join(cities, by = "code_muni")
+# firjan_full <- firjan_full |>
+#   dplyr::mutate(
+#     code_region = as.numeric(substring(code_muni, 1, 1)),
+#     code_state  = as.numeric(substring(code_muni, 1, 2)),
+#     name_muni = stringr::str_extra
+#   )
 id_muni <- readr::read_csv("data/id_muni.csv")
 shp_hdi <- dplyr::select(firjan_full, name_muni_full)
 
