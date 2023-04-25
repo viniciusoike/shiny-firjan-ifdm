@@ -72,7 +72,9 @@ body <- dashboardBody(
               box(
                 width = 9,
                 solidHeader = TRUE,
-                tmapOutput("map", width = "100%", height = 700)
+                shinycssloaders::withSpinner(
+                  tmapOutput("map", width = "100%", height = 700)
+                )
               ),
               column(
                 3,
@@ -87,7 +89,8 @@ body <- dashboardBody(
                   id = "tabset1", height = "300px",
                   tabPanel("Sobre", HTML(text_about)),
                   tabPanel("Classificação", HTML(text_classification)),
-                  tabPanel("Como usar", HTML(text_use))
+                  tabPanel("Como usar", HTML(text_use)),
+                  tabPanel("Metodologia", HTML(text_methods))
                 )
               )
             ),
