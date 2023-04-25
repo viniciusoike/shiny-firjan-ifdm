@@ -4,9 +4,9 @@ style_choices <- c("Básico", "Quantis", "Quebras Naturais", "Clusters")
 
 vl <- c(
   "IDH" = "idhm",
-  "IDH - Educação" = "idhm_e",
-  "IDH - Renda" = "idhm_r",
-  "IDH - Saúde" = "idhm_s"
+  "Educação" = "idhm_e",
+  "Renda" = "idhm_r",
+  "Saúde" = "idhm_s"
 )
 
 styles <- c(
@@ -24,7 +24,7 @@ pals <- c(
   "5 (Tons de Verde)" = "Greens"
 )
 
-text_about <- "O Índice FIRJAN de Desenvolvimento Municipal (IFDM) – é um indicador anual que mensura o desenvolvimento municipal em três eixos: Emprego & renda, Educação e Saúde. O IFDM utiliza várias bases públicas e tem uma metodologia similar a do IDH da ONU.<br><br>O IFDM está disponível de 2006 a 2016. Vale notar que os valores de 2015-16 foram bastante afetados pela recessão econômica."
+text_about <- "O Índice FIRJAN de Desenvolvimento Municipal (IFDM) – é um indicador anual que mensura o desenvolvimento municipal em três eixos: Emprego & renda, Educação e Saúde. O IFDM utiliza várias bases públicas e tem uma metodologia similar a do IDH da ONU.<br><br>Vale notar que os valores de 2015-16 foram bastante afetados pela recessão econômica."
 text_classification <-
   "A leitura do IFDM é similar a do IDH:
    <br>
@@ -36,6 +36,16 @@ text_classification <-
 </ul>  "
 
 text_use <- "Para iniciar selecione o município. A lista está ordenada pela população do município, mas você pode digitar o nome e usar o autocomplete. Os outros campos ajudam a refinar o resultado e alteram tanto o mapa como os gráficos abaixo.<br><br>Vale notar que o mapa de Cluster e de Quebras Naturais pode levar algum tempo para carregar."
+
+text_methods <- "
+<p>
+<b>IFDM</b>Para mais informações sobre o IFDM consulte o <a href='https://www.firjan.com.br/ifdm/' target='_blank'>site</a>.
+</p>
+<p>
+<b>Tipos de mapa</b>. O método de 'Quebras Naturais' segue o algoritmo de <a href='https://en.wikipedia.org/wiki/Jenks_natural_breaks_optimization' target='_blank'>Jenks</a>, que busca formar grupos homogêneos.
+Já a opção 'Cluster' segue um algotirmo de hierarchical clustering.
+</p>
+"
 
 aboutme_pt <-
   "Meu nome é Vinícius Oike Reginatto, sou economista, mestre em Economia pela Universidade de São Paulo e moro em São Paulo desde 2017. Trabalho com mercado imobiliário e no meu tempo livre faço aplicativos em Shiny."
