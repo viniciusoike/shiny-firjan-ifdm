@@ -78,6 +78,7 @@ map_hdi <- function(
         alpha = 0.7,
         title = title,
         id = "name_muni",
+        name = "name_muni",
         popup.vars = popup_vars,
         popup.format = list(digits = 3)
       ) +
