@@ -4,9 +4,9 @@ style_choices <- c("Básico", "Quantis", "Quebras Naturais", "Clusters")
 
 vl <- c(
   "IDH" = "idhm",
-  "Educação" = "idhm_e",
-  "Renda" = "idhm_r",
-  "Saúde" = "idhm_s"
+  "IDH - Educação" = "idhm_e",
+  "IDH - Renda" = "idhm_r",
+  "IDH - Saúde" = "idhm_s"
 )
 
 styles <- c(
