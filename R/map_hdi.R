@@ -14,6 +14,7 @@ prep_mapdata <- function(city, geo = "Estado") {
     # Pass on the full objects
     shp <- firjan_full
   }
+
   return(shp)
 
 }
@@ -45,7 +46,7 @@ get_map_variable <- function(year, variable) {
 }
 
 map_hdi <- function(
-    shp,
+    shp = NULL,
     city = "Porto Alegre (RS)",
     year = 2010,
     variable = "IDH",
@@ -56,13 +57,12 @@ map_hdi <- function(
     geo = "Estado",
     border = NULL) {
 
+  if (is.null(shp)) {
+    shp <- prep_mapdata(city, geo)
+  }
 
-  # Get the centroid of the selected city
-  coords_city <- shp_hdi |>
-    dplyr::filter(name_muni_full == city) |>
-    sf::st_centroid() |>
-    sf::st_coordinates() |>
-    as.numeric()
+  coords_city <- dplyr::filter(cities, name_muni_full == city)
+  coords_city <- c(coords_city$x, coords_city$y)
 
   popup_vars <- paste(c("overall", "education", "income", "health"), year, sep = "_")
   names(popup_vars) <- c("IDH", "IDH - Educação", "IDH - Renda", "IDH - Saúde")
