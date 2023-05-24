@@ -4,6 +4,7 @@
 # library(xml2)
 # library(janitor)
 library(dplyr)
+library(sf)
 
 # Read IBGE ids for all cities in Brazil (see shapes.R)
 id = readr::read_csv("data/id_muni.csv")
@@ -35,5 +36,25 @@ cities <- cities |>
     name_muni_full = forcats::fct_reorder(name_muni_full, rank)
   ) |>
   arrange(name_muni_full)
+
+# Find city centers
+
+# Download shape file with all city borders in Brazil
+borders <- geobr::read_municipality(year = 2020)
+# Compute centroids and convert to coordinates
+centroids <- st_centroid(borders)
+coords <- st_coordinates(centroids)
+# Add coordinates as columns
+centroids <- centroids |>
+  mutate(
+    x = coords[, 1],
+    y = coords[, 2]
+  )
+# Join coordinates table with cities table
+centroids <- centroids %>%
+  st_drop_geometry() %>%
+  select(code_muni, x, y)
+cities <- left_join(cities, centroids, by = "code_muni")
+
 # Export to rds to preserve factor
 readr::write_rds(cities, "data/cities.rds")
