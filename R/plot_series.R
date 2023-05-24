@@ -22,9 +22,7 @@ prep_series_data <- function(city) {
   return(df)
 }
 
-plot_series <- function(df, city) {
-
-  title = glue::glue("Indicadores {city}")
+plot_series <- function(df) {
 
   p <-
     ggplot(
@@ -41,7 +39,7 @@ plot_series <- function(df, city) {
     scale_y_continuous(breaks = seq(0, 1, 0.05)) +
     scale_color_manual(name = "", values = colors_qual) +
     labs(
-      title = title,
+      title = "Indicadores",
       x = NULL,
       y = "IDH (Firjan)"
     ) +
