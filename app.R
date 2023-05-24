@@ -3,21 +3,7 @@ library(shinydashboard)
 
 header <- dashboardHeader(
   title = HTML("Dashboard IFDM - Vinicius Oike"),
-  titleWidth = 550,
-  dropdownMenu(
-    type = "message",
-    icon = icon("share-alt"),
-    messageItem(
-      from = "Twitter",
-      message = "",
-      icon = icon("twitter")
-      ),
-    messageItem(
-      from = "LinkedIn",
-      message = "",
-      icon = icon("linkedin")
-      )
-    )
+  titleWidth = 550
 )
 
 sidebar <- dashboardSidebar(
@@ -135,14 +121,15 @@ body <- dashboardBody(
     tabItem("about_me",
     dashboardBody(
       fluidRow(
-        column(4,
+        column(5,
                tags$div(
                  class = "container-fluid",
                  tags$h1("Vinicius Oike Reginatto"),
                  tags$h3("Sobre mim"),
                  tags$p(aboutme_pt),
-                 tags$h3("About Me"),
-                 tags$p(aboutme_en),
+                 tags$h3("Sobre o app"),
+                 tags$p(about_app1),
+                 tags$p(about_app2),
                  tags$h5("My links:"),
                  tags$ul(
                    tags$li(tags$a(href = "https://twitter.com/viniciusoike", icon("twitter"), "Twitter")),
@@ -231,7 +218,12 @@ server <- function(input, output, session) {
   # Boxes (with big numbers)
 
   # Prepare data
-  df_box <- reactive(prep_infobox(city(), year()))
+  df_box <- reactive({
+    req(city())
+    req(year())
+
+    prep_infobox(city(), year())
+  })
 
   ## Boxes with key numbers
   output$box_hdi <- renderInfoBox({
