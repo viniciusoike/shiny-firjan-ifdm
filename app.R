@@ -23,11 +23,15 @@ header <- dashboardHeader(
 sidebar <- dashboardSidebar(
   sidebarMenu(
     menuItem("Dashboard", icon = icon("dashboard"), tabName = "dashboard"),
-    div(selectizeInput("city_sel",
-                   label = "Escolha uma cidade",
-                   choices = city_list,
-                   selected = "São Paulo (SP)",
-                   multiple = FALSE)),
+      selectizeInput("city_sel",
+        choices = NULL,
+        label = "Escolha Cidade",
+        selected = "São Paulo (SP)"),
+      # selectizeInput("city_sel",
+      #              label = "Escolha uma cidade",
+      #              choices = city_list,
+      #              selected = "São Paulo (SP)",
+      #              multiple = FALSE)),
     selectInput("variable",
                 label = "Índice para visualizar",
                 choices = names(vl),
@@ -35,7 +39,7 @@ sidebar <- dashboardSidebar(
     selectInput("year_sel",
                 label = "Ano",
                 choices = 2005:2016,
-                selected = 2016),
+                selected = 2010),
     selectInput("palette",
                 label = "Paleta de cores",
                 choices = names(pals),
@@ -160,23 +164,35 @@ ui <- dashboardPage(
 # Server
 server <- function(input, output, session) {
 
+  updateSelectizeInput(session, "city_sel", choices = city_list, server = TRUE)
+
+  city <- reactive({input$city_sel})
+  year <- reactive({input$year_sel})
+  geo <- reactive({input$geo})
+
   # Map
 
   # Prepare the data for the map
-  mapdata <- reactive(prep_mapdata(input$city_sel, input$geo))
+  # mapdata <- reactive(prep_mapdata(input$city_sel, input$geo))
   mapborder <- reactive(get_state_border(input$city_sel, input$geo))
   # Output the map
   output$map <- renderTmap({
+
+    req(city())
+    req(year())
+    req(palette())
+    req(geo())
+
     map_hdi(
-      shp = mapdata(),
-      city = input$city_sel,
-      year = input$year_sel,
+      shp = NULL,
+      city = city(),
+      year = year(),
       variable = input$variable,
-      title = input$city_sel,
+      title = city(),
       pal = input$palette,
       style = input$style,
       n = input$nbreaks,
-      geo = input$geo,
+      geo = geo(),
       border = mapborder()
     )
   })
@@ -185,21 +201,26 @@ server <- function(input, output, session) {
 
   # Plot line ranking
   output$plot_ranking <- renderPlot({
-    plot_ranking(input$city_sel, input$year_sel, input$geo)
+    req(city())
+    plot_ranking(city(), year(), geo())
   }, res = 96)
 
   # Plot histogram
   output$plot_histogram <- renderPlot({
-    plot_histogram(input$city_sel, input$year_sel, input$geo)
+    req(city())
+    plot_histogram(city(), year(), geo())
   }, res = 96)
 
   # Prepare the data for the time-series plots
-  df_series <- reactive(prep_series_data(input$city_sel))
+  df_series <- reactive({
+    req(city())
+    prep_series_data(city())}
+    )
   df_benchmark <- reactive(prep_benchmark(df_series()))
 
   # Plot Time Series
   output$plot_series <- renderPlotly({
-    plot_series(df_series(), input$city_sel)
+    plot_series(df_series())
   })
 
   # Plot series comparison
@@ -210,7 +231,7 @@ server <- function(input, output, session) {
   # Boxes (with big numbers)
 
   # Prepare data
-  df_box <- reactive(prep_infobox(input$city_sel, input$year_sel))
+  df_box <- reactive(prep_infobox(city(), year()))
 
   ## Boxes with key numbers
   output$box_hdi <- renderInfoBox({
