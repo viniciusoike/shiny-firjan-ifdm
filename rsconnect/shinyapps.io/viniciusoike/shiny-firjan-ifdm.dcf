@@ -5,7 +5,7 @@ account: viniciusoike
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 8892064
-bundleId: 7255753
+bundleId: 7255829
 url: https://viniciusoike.shinyapps.io/shiny-firjan-ifdm/
-when: 1684900595.13651
-lastSyncTime: 1684900595.13652
+when: 1684901831.64054
+lastSyncTime: 1684901831.64056
