@@ -13,11 +13,6 @@ sidebar <- dashboardSidebar(
         choices = NULL,
         label = "Escolha Cidade",
         selected = "São Paulo (SP)"),
-      # selectizeInput("city_sel",
-      #              label = "Escolha uma cidade",
-      #              choices = city_list,
-      #              selected = "São Paulo (SP)",
-      #              multiple = FALSE)),
     selectInput("variable",
                 label = "Índice para visualizar",
                 choices = names(vl),
@@ -135,7 +130,7 @@ body <- dashboardBody(
                    tags$li(tags$a(href = "https://twitter.com/viniciusoike", icon("twitter"), "Twitter")),
                    tags$li(tags$a(href = "https://github.com/viniciusoike", icon("github"), "GitHub")),
                    tags$li(tags$a(href = "https://www.linkedin.com/in/vinicius-oike-993826a9/", icon("linkedin"), "LinkedIn")),
-                   tags$li(tags$a(href = "https://www.modelodomundo.com", icon("globe"), "Site Pessoal"))
+                   tags$li(tags$a(href = "https://restateinsight.com", icon("globe"), "Site Pessoal"))
                  )))
       )
 
