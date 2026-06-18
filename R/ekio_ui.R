@@ -1,55 +1,53 @@
 ## EKIO UI helpers ---------------------------------------------------------
-# bslib building blocks for the EKIO-branded shell. Mirrors the design system
+# bslib building blocks for the EKIO-branded shell, with brand colours and the
+# ggplot theme sourced from the `ekioplot` package. Mirrors the design system
 # in styles.css (shared with shiny-painel-mercado). Functions namespace their
 # bslib/shiny calls so this file can be auto-sourced from R/ before app.R.
 
-# Index palette: maps an internal index_type key to a kpi-card colour class
-# (defined in styles.css) and to a hex colour for plots.
-INDEX_COLOR_CLASS <- c(
-  overall = "blue", education = "teal", health = "green", income = "orange"
-)
+library(ekioplot)
+
+## Brand palette (from ekioplot) -------------------------------------------
+
+# ekio_accent: blue, orange, teal, amber, purple, red, green, gray
+.ekio_accent <- ekioplot::ekio_accent
+.ekio_grays <- ekioplot::ekio_gray
+
+# Internal index_type key -> hex, drawn from the ekioplot accent palette so the
+# plots match the KPI-card colours defined in styles.css.
 INDEX_HEX <- c(
-  overall = "#1E3A5F", education = "#2C7A7B",
-  health = "#38A169", income = "#DD6B20"
+  overall = unname(.ekio_accent[1]), # blue  #1E3A5F
+  education = unname(.ekio_accent[3]), # teal  #2C7A7B
+  health = unname(.ekio_accent[7]), # green #38A169
+  income = unname(.ekio_accent[2]) # orange #DD6B20
+)
+
+# Internal index_type key -> kpi-card colour class (defined in styles.css)
+INDEX_COLOR_CLASS <- c(
+  overall = "blue",
+  education = "teal",
+  health = "green",
+  income = "orange"
 )
 
 # Same palette keyed by the Portuguese factor labels used in series_data, so
 # ggplot scale_*_manual() maps each index to its brand colour by name.
 INDEX_PAL_LABELLED <- c(
-  "Geral (IFDM)"    = unname(INDEX_HEX["overall"]),
-  "Saúde"           = unname(INDEX_HEX["health"]),
+  "Geral (IFDM)" = unname(INDEX_HEX["overall"]),
+  "Saúde" = unname(INDEX_HEX["health"]),
   "Emprego & Renda" = unname(INDEX_HEX["income"]),
-  "Educação"        = unname(INDEX_HEX["education"])
+  "Educação" = unname(INDEX_HEX["education"])
 )
 
 # City vs. benchmark line (EKIO blue + orange accent)
-BENCH_PAL <- c("#1E3A5F", "#DD6B20")
+BENCH_PAL <- ekioplot::ekio_pal("binary")
 
-## ggplot theme ------------------------------------------------------------
+# Neutral greys from the ekioplot gray ramp (ink / muted text / grid lines)
+EKIO_INK <- unname(.ekio_grays[1]) # #1A202C
+EKIO_MUTED <- unname(.ekio_grays[4]) # #718096
+EKIO_GRID <- unname(.ekio_grays[7]) # #E2E8F0
 
-EKIO_INK   <- "#1A202C"
-EKIO_GRID  <- "#E2E8F0"
-EKIO_MUTED <- "#718096"
-
-# Shared EKIO ggplot theme. base_family left empty so server-side rendering
-# (Linux on shinyapps.io) falls back to the default sans rather than failing
-# on the Avenir brand font, which is macOS-only.
-theme_ekio <- function(base_size = 13) {
-  ggplot2::theme_minimal(base_size = base_size) +
-    ggplot2::theme(
-      text             = ggplot2::element_text(colour = EKIO_INK),
-      plot.title       = ggplot2::element_text(face = "bold", size = ggplot2::rel(1.0)),
-      plot.subtitle    = ggplot2::element_text(colour = EKIO_MUTED, size = ggplot2::rel(0.82)),
-      plot.title.position = "plot",
-      axis.title       = ggplot2::element_text(colour = EKIO_MUTED, size = ggplot2::rel(0.85)),
-      axis.text        = ggplot2::element_text(colour = EKIO_MUTED),
-      panel.grid.minor = ggplot2::element_blank(),
-      panel.grid.major = ggplot2::element_line(colour = EKIO_GRID, linewidth = 0.4),
-      strip.text       = ggplot2::element_text(face = "bold", colour = EKIO_INK, hjust = 0),
-      legend.position  = "top",
-      legend.title     = ggplot2::element_blank()
-    )
-}
+# The shared ggplot theme is ekioplot::theme_ekio(), attached above; the plot
+# builders in R/plot_*.R call it directly (no local definition needed).
 
 ## Layout helpers ----------------------------------------------------------
 
@@ -114,25 +112,37 @@ about_card <- function(title, text) {
 
 # pt-BR number with comma decimal separator
 fmt_ifdm <- function(x, digits = 3) {
-  if (length(x) == 0 || is.na(x)) return("—")
+  if (length(x) == 0 || is.na(x)) {
+    return("—")
+  }
   sub("\\.", ",", formatC(x, format = "f", digits = digits))
 }
 
 # Signed year-over-year change in IFDM points (e.g. "+0,012")
 ifdm_delta_lbl <- function(d) {
-  if (length(d) == 0 || is.na(d)) return("—")
+  if (length(d) == 0 || is.na(d)) {
+    return("—")
+  }
   sub("\\.", ",", sprintf("%+.3f", d))
 }
 
 pp_dir <- function(d) {
-  if (length(d) == 0 || is.na(d)) "neutral" else if (d >= 0) "up" else "down"
+  if (length(d) == 0 || is.na(d)) {
+    "neutral"
+  } else if (d >= 0) {
+    "up"
+  } else {
+    "down"
+  }
 }
 
 ## KPI cards (Panorama) ----------------------------------------------------
 
 kpi_sparkline <- function(values, n = 12) {
   v <- utils::tail(values[!is.na(values)], n)
-  if (length(v) < 2) return(NULL)
+  if (length(v) < 2) {
+    return(NULL)
+  }
   rng <- range(v)
   span <- if (diff(rng) == 0) 1 else diff(rng)
   heights <- 3 + (v - rng[1]) / span * 97
@@ -144,8 +154,15 @@ kpi_sparkline <- function(values, n = 12) {
   )
 }
 
-kpi_card <- function(label, value, delta, period, spark_values,
-                     color = "blue", dir = "neutral") {
+kpi_card <- function(
+  label,
+  value,
+  delta,
+  period,
+  spark_values,
+  color = "blue",
+  dir = "neutral"
+) {
   shiny::div(
     class = paste("kpi-card", color),
     shiny::div(class = "kpi-label", label),
