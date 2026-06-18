@@ -50,38 +50,47 @@ plot_ranking <- function(city, year, geo) {
 
   df <- prep_ranking(city, year, geo)
 
-  xbreak = ifelse(geo == "Estado", 50, ifelse(geo == "Região", 100, 500))
+  subtitle <- switch(geo,
+    "Estado" = "Posição entre os municípios do estado",
+    "Região" = "Posição entre os municípios da região",
+    "Brasil" = "Posição no ranking nacional"
+  )
 
   ggplot() +
     geom_segment(
       data = df$limits,
-      aes(x = xmin, xend = xmax, y = index_type, yend = index_type)
+      aes(x = xmin, xend = xmax, y = index_type, yend = index_type),
+      color = "#CBD5E0",
+      linewidth = 1
     ) +
     geom_point(
       data = df$ranking,
-      aes(x = rank, y = index_type),
+      aes(x = rank, y = index_type, fill = index_type),
       shape = 22,
-      size = 3
+      size = 4,
+      color = "white"
     ) +
     geom_text(
       data = df$ranking,
       aes(x = rank, y = index_type, label = rank),
       size = 3,
-      nudge_y = 0.15
+      color = EKIO_INK,
+      nudge_y = 0.24
     ) +
+    scale_fill_manual(values = INDEX_PAL_LABELLED) +
+    guides(fill = "none") +
     labs(
-      x = "Ranking",
+      x = "Ranking (1 = melhor)",
       y = NULL,
-      title = glue::glue("Ranking: {city}")
+      subtitle = subtitle
     ) +
-    # scale_x_continuous(breaks = c(1, seq(50, round(max(df$limits$xmax), -2), by = xbreak))) +
-    theme_minimal() +
+    theme_ekio() +
     theme(
-      panel.grid = element_blank(),
+      panel.grid.major.y = element_blank(),
       panel.grid.major.x = element_line(
         linewidth = 0.25,
         linetype = 2,
-        color = "gray80"
-        )
+        color = "#CBD5E0"
+      )
     )
 }

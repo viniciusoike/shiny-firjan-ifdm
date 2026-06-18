@@ -31,23 +31,18 @@ plot_series <- function(df) {
         year,
         hdi,
         color = index_type,
-        text = paste("Ano:", year, "<br>IDH:", hdi, "<br>Indicador:", index_type))
+        text = paste("Ano:", year, "<br>IFDM:", hdi, "<br>Indicador:", index_type))
       ) +
-    geom_line(aes(group = index_type)) +
-    geom_point() +
-    scale_x_continuous(breaks = 2005:2016) +
+    geom_line(aes(group = index_type), linewidth = 0.7) +
+    geom_point(size = 1.6) +
+    scale_x_continuous(breaks = 2013:2023) +
     scale_y_continuous(breaks = seq(0, 1, 0.05)) +
-    scale_color_manual(name = "", values = colors_qual) +
+    scale_color_manual(name = "", values = INDEX_PAL_LABELLED) +
     labs(
-      title = "Indicadores",
       x = NULL,
-      y = "IDH (Firjan)"
+      y = "IFDM"
     ) +
-    theme_minimal() +
-    theme(
-      legend.position = "top",
-      panel.grid.minor = element_blank()
-    )
+    theme_ekio()
 
   plotly::ggplotly(p, tooltip = "text")
 
@@ -63,24 +58,19 @@ plot_series_comparison <- function(df) {
         hdi,
         group = name_muni_full,
         color = name_muni_full,
-        text = paste(name_muni_full, "<br>Ano:", year, "<br>IDH:", hdi))
+        text = paste(name_muni_full, "<br>Ano:", year, "<br>IFDM:", hdi))
     ) +
-    geom_line() +
-    geom_point() +
+    geom_line(linewidth = 0.7) +
+    geom_point(size = 1.4) +
     scale_y_continuous(breaks = seq(0.1, 1, 0.1)) +
     facet_wrap(vars(index_type)) +
-    scale_color_manual(name = "", values = colors_div) +
+    scale_color_manual(name = "", values = BENCH_PAL) +
     guides(color = "none") +
     labs(
-      title = "Benchmark",
       x = NULL,
-      y = "IDH (Firjan)"
+      y = "IFDM"
     ) +
-    theme_minimal() +
-    theme(
-      legend.position = "top",
-      panel.grid.minor = element_blank()
-    )
+    theme_ekio()
 
   plotly::ggplotly(p, tooltip = "text")
 

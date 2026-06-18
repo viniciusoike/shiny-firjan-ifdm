@@ -40,25 +40,24 @@ plot_histogram <- function(city = "São Paulo (SP)", year_sel = 2016, geo = "Est
       aes(fill = index_type),
       color = "white",
       binwidth = 0.05) +
-    geom_hline(yintercept = 0) +
+    geom_hline(yintercept = 0, color = EKIO_GRID) +
     geom_vline(
       data = filter(df, name_muni_full == city),
       aes(xintercept = hdi),
       linetype = 2,
-      linewidth = 0.4,
-      color = "black"
+      linewidth = 0.5,
+      color = EKIO_INK
     ) +
     scale_x_continuous(breaks = seq(0.1, 1, 0.1)) +
-    scale_fill_manual(values = colors_qual) +
+    scale_fill_manual(values = INDEX_PAL_LABELLED) +
     guides(fill = "none") +
     facet_wrap(vars(index_type)) +
     labs(
-      title = glue::glue("Distribuição do IDH ({year_sel})"),
-      subtitle = "Histogramas com distribuição do IDH.\nLinha traçejada indica a posição do município selecionado.",
-      x = "IDH",
+      subtitle = "Linha tracejada: município selecionado.",
+      x = "IFDM",
       y = "Contagem"
     ) +
-    theme_minimal() +
+    theme_ekio() +
     theme(
       panel.grid.major.x = element_blank(),
       panel.grid.minor.x = element_blank()

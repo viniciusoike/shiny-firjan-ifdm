@@ -48,7 +48,7 @@ get_map_variable <- function(year, variable) {
 map_hdi <- function(
     shp = NULL,
     city = "Porto Alegre (RS)",
-    year = 2010,
+    year = 2023,
     variable = "IDH",
     title = variable,
     pal = "3 (Vermelho-Azul)",
@@ -64,73 +64,42 @@ map_hdi <- function(
   coords_city <- dplyr::filter(cities, name_muni_full == city)
   coords_city <- c(coords_city$x, coords_city$y)
 
-  popup_vars <- paste(c("overall", "education", "income", "health"), year, sep = "_")
-  names(popup_vars) <- c("IDH", "IDH - Educação", "IDH - Renda", "IDH - Saúde")
+  fill_col <- get_map_variable(year, variable)
 
-  # Map
-  if (geo == "Estado") {
-    tm_shape(shp) +
-      tm_fill(
-        col = get_map_variable(year, variable),
-        style = styles[style],
-        n = n,
-        palette = pals[pal],
-        alpha = 0.7,
-        title = title,
-        id = "name_muni",
-        name = "name_muni",
-        popup.vars = popup_vars,
-        popup.format = list(digits = 3)
-      ) +
-      tm_borders(col = "gray50") +
-      tm_basemap(server = "CartoDB.Positron") +
-      tm_view(set.view = c(coords_city, 10))
-  } else {
-    tm_shape(shp) +
-      tm_fill(
-        col = get_map_variable(year, variable),
-        style = styles[style],
-        n = n,
-        palette = pals[pal],
-        alpha = 0.7,
-        title = title,
-        id = "name_muni",
-        popup.vars = popup_vars,
-        popup.format = list(digits = 3)
-      ) +
-      tm_borders(col = "gray50") +
+  popup_vars <- paste(c("overall", "education", "income", "health"), year, sep = "_")
+  names(popup_vars) <- c(
+    "IFDM", "IFDM - Educação", "IFDM - Emprego & Renda", "IFDM - Saúde"
+  )
+
+  # tmap v4: scale + legend are objects passed to tm_polygons(); the visual
+  # variable is `fill`, outlines are `col`, opacity is `fill_alpha`.
+  fill_scale <- tm_scale_intervals(
+    style = unname(styles[style]),
+    n = n,
+    values = unname(pals[pal])
+  )
+
+  m <- tm_shape(shp) +
+    tm_polygons(
+      fill = fill_col,
+      fill.scale = fill_scale,
+      fill.legend = tm_legend(title = title),
+      fill_alpha = 0.7,
+      col = "gray50",
+      lwd = 0.5,
+      id = "name_muni",
+      popup.vars = popup_vars,
+      popup.format = list(digits = 3)
+    )
+
+  # Region/country comparisons overlay the bounding state/region borders.
+  if (!is.null(border)) {
+    m <- m +
       tm_shape(border) +
-      tm_borders(col = "gray30") +
-      tm_basemap(server = "CartoDB.Positron") +
-      tm_view(set.view = c(coords_city, 10))
+      tm_borders(col = "gray30")
   }
 
+  m +
+    tm_basemap(server = "CartoDB.Positron") +
+    tm_view(set_view = c(coords_city, 10))
 }
-
-# map_hdi <- function(shp, city, variable, title, pal = "Paleta 3", style = "Básico", n = 6) {
-#
-#   # Get the centroid of the selected city
-#   coords_city <- map_data |>
-#     dplyr::filter(name_muni_full == city) |>
-#     sf::st_centroid() |>
-#     sf::st_coordinates() |>
-#     as.numeric()
-#
-#   # Map
-#   tm_shape(shp) +
-#     tm_fill(
-#       col = vl[variable],
-#       style = styles[style],
-#       n = n,
-#       palette = pals[pal],
-#       alpha = 0.7,
-#       title = title,
-#       id = "name_muni",
-#       popup.vars = vl,
-#       popup.format = list(digits = 3)
-#     ) +
-#     tm_borders(col = "gray50") +
-#     tm_basemap(server = "CartoDB.Positron") +
-#     tm_view(set.view = c(coords_city, 10))
-#
-# }

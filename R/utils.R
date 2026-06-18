@@ -16,12 +16,14 @@ styles <- c(
   "Cluster" = "hclust"
 )
 
+# cols4all palette names (tmap v4). The old Brewer/viridis names still resolve
+# but emit a rename warning; these are the canonical v4 identifiers.
 pals <- c(
   "1 (Viridis)" = "viridis",
-  "2 (Marrom-Verde)" = "BrBG",
-  "3 (Vermelho-Azul)" = "RdBu",
-  "4 (Tons de Azul)" = "Blues",
-  "5 (Tons de Verde)" = "Greens"
+  "2 (Marrom-Verde)" = "brewer.br_bg",
+  "3 (Vermelho-Azul)" = "brewer.rd_bu",
+  "4 (Tons de Azul)" = "brewer.blues",
+  "5 (Tons de Verde)" = "brewer.greens"
 )
 
 text_about <- "O Índice FIRJAN de Desenvolvimento Municipal (IFDM) – é um indicador anual que mensura o desenvolvimento municipal em três eixos: Emprego & renda, Educação e Saúde. O IFDM utiliza várias bases públicas e tem uma metodologia similar a do IDH da ONU."
@@ -85,9 +87,9 @@ classify_hdi <- function(x) {
 
 }
 
-prep_infobox <- function(city, hdi_year = 2016) {
+prep_infobox <- function(city, hdi_year = 2023) {
 
-  new_names <- c("Educação", "Renda", "Geral (IFDM)", "Saúde")
+  new_names <- c("Educação", "Emprego & Renda", "Geral (IFDM)", "Saúde")
   names(new_names) <- c("idhm_e", "idhm_r", "idhm", "idhm_s")
 
   df <- series_data |>
