@@ -1346,7 +1346,7 @@
     },
     "ekioplot": {
       "Source": "https://viniciusoike.r-universe.dev",
-      "Repository": null,
+      "Repository": "viniciusoike",
       "description": {
         "Package": "ekioplot",
         "Type": "Package",
