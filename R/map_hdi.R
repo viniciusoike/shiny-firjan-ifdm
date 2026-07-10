@@ -1,17 +1,10 @@
-prep_mapdata <- function(city, geo = "Estado") {
+prep_mapdata <- function(ctx, geo = "Estado") {
 
   if (geo == "Estado") {
-    # Get the state abbreviation from the city name
-    state <- dplyr::filter(id_muni, name_muni_full == city)$code_state
-    # Filter the shape file
-    shp <- dplyr::filter(firjan_full, code_state %in% state)
+    shp <- dplyr::filter(firjan_full, code_state %in% ctx$code_state)
   } else if (geo == "Região") {
-    # Get the state abbreviation from the city name
-    region <- dplyr::filter(id_muni, name_muni_full == city)$code_region
-    # Filter the shape file
-    shp <- dplyr::filter(firjan_full, code_region %in% region)
+    shp <- dplyr::filter(firjan_full, code_region %in% ctx$code_region)
   } else if (geo == "Brasil") {
-    # Pass on the full objects
     shp <- firjan_full
   }
 
@@ -19,12 +12,11 @@ prep_mapdata <- function(city, geo = "Estado") {
 
 }
 
-get_state_border <- function(city, geo = "Região") {
+get_state_border <- function(ctx, geo = "Região") {
 
   if (geo == "Região") {
-    region <- dplyr::filter(id_muni, name_muni_full == city)$code_region
-    state <- dplyr::filter(state_border, code_region == region)
-  } else if (geo == "Brasil"){
+    state <- dplyr::filter(state_border, code_region == ctx$code_region)
+  } else if (geo == "Brasil") {
     state <- state_border
   } else {
     state <- NULL
