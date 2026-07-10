@@ -5,28 +5,28 @@
 # bslib/shiny calls so this file can be auto-sourced from R/ before app.R.
 
 library(ekioplot)
-
 ## Brand palette (from ekioplot) -------------------------------------------
 
 # ekio_accent: blue, orange, teal, amber, purple, red, green, gray
 .ekio_accent <- ekioplot::ekio_accent
 .ekio_grays <- ekioplot::ekio_gray
+.ekio_blues <- ekioplot::ekio_blue
 
 # Internal index_type key -> hex, drawn from the ekioplot accent palette so the
 # plots match the KPI-card colours defined in styles.css.
 INDEX_HEX <- c(
-  overall = unname(.ekio_accent[1]), # blue  #1E3A5F
-  education = unname(.ekio_accent[3]), # teal  #2C7A7B
-  health = unname(.ekio_accent[7]), # green #38A169
-  income = unname(.ekio_accent[2]) # orange #DD6B20
+  overall = unname(.ekio_blues[1]), # ekio_darkblue  #0D1B2A
+  education = unname(.ekio_accent[3]), # ekio_teal  #2C7A7B
+  health = unname(.ekio_blues[4]), # ekio_blue #1E3A5F
+  income = unname(.ekio_accent[4]) # ekio_amber #D69E2E
 )
 
 # Internal index_type key -> kpi-card colour class (defined in styles.css)
 INDEX_COLOR_CLASS <- c(
-  overall = "blue",
+  overall = "bluedark",
   education = "teal",
-  health = "green",
-  income = "orange"
+  health = "blue",
+  income = "amber"
 )
 
 # Same palette keyed by the Portuguese factor labels used in series_data, so
@@ -48,6 +48,50 @@ EKIO_GRID <- unname(.ekio_grays[7]) # #E2E8F0
 
 # The shared ggplot theme is ekioplot::theme_ekio(), attached above; the plot
 # builders in R/plot_*.R call it directly (no local definition needed).
+
+## echarts4r theme ---------------------------------------------------------
+
+# EKIO styling for echarts4r widgets — the echarts counterpart to theme_ekio().
+# Applies the brand colour palette (positional, so series order must match),
+# muted axes, dashed grey split lines, and the Avenir font stack. Fonts are
+# safe here because echarts renders client-side in the browser.
+e_ekio <- function(e, palette = NULL, y_name = NULL, legend = TRUE) {
+  if (!is.null(palette)) {
+    e <- echarts4r::e_color(e, unname(palette))
+  }
+  e |>
+    echarts4r::e_grid(top = 48, bottom = 36, left = 52, right = 20) |>
+    echarts4r::e_x_axis(
+      # `scale` fits the axis to the data extent; without it a value axis forces
+      # zero and squashes the 2013–2023 years into a sliver at the right.
+      scale = TRUE,
+      axisLine = list(lineStyle = list(color = EKIO_GRID)),
+      axisTick = list(show = FALSE),
+      axisLabel = list(color = EKIO_MUTED, formatter = "{value}"),
+      splitLine = list(show = FALSE)
+    ) |>
+    echarts4r::e_y_axis(
+      name = y_name,
+      scale = TRUE,
+      nameLocation = "end",
+      nameTextStyle = list(color = EKIO_MUTED, align = "left"),
+      axisLine = list(show = FALSE),
+      axisTick = list(show = FALSE),
+      axisLabel = list(color = EKIO_MUTED),
+      splitLine = list(
+        show = TRUE,
+        lineStyle = list(color = EKIO_GRID, type = "dashed")
+      )
+    ) |>
+    echarts4r::e_legend(
+      show = legend,
+      top = 6,
+      textStyle = list(color = EKIO_INK)
+    ) |>
+    echarts4r::e_text_style(
+      fontFamily = "Avenir, 'Helvetica Neue', Arial, sans-serif"
+    )
+}
 
 ## Layout helpers ----------------------------------------------------------
 

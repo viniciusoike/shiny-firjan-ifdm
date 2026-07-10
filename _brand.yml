@@ -12,6 +12,7 @@ color:
     ekio-amber: "#D69E2E"
     ekio-green: "#38A169"
     ekio-red: "#C53030"
+    bluedark: ekio-blue-dark
     blue: ekio-blue
     teal: ekio-teal
     orange: ekio-orange

@@ -1,4 +1,3 @@
-
 idhm_choices <- c("IDH", "IDH - Educação", "IDH - Renda", "IDH - Saúde")
 style_choices <- c("Básico", "Quantis", "Quebras Naturais", "Clusters")
 
@@ -45,7 +44,7 @@ pode levar algum tempo para carregar."
 
 text_methods <- "
 <p>
-<b>IFDM</b>Para mais informações sobre o IFDM consulte o <a href='https://www.firjan.com.br/ifdm/' target='_blank'>site</a>.
+<b>IFDM</b> Para mais informações sobre o IFDM consulte o <a href='https://www.firjan.com.br/ifdm/' target='_blank'>site</a>.
 </p>
 <p>
 <b>Tipos de mapa</b>. O método de 'Quebras Naturais' segue o algoritmo de <a href='https://en.wikipedia.org/wiki/Jenks_natural_breaks_optimization' target='_blank'>Jenks</a>, que busca formar grupos homogêneos.
@@ -53,27 +52,64 @@ Já a opção 'Cluster' segue um algotirmo de hierarchical clustering.
 </p>
 "
 
-aboutme_pt <-
-  "Meu nome é Vinícius Oike Reginatto, sou economista, mestre em Economia pela Universidade de São Paulo e moro em São Paulo desde 2017. Trabalho com mercado imobiliário e no meu tempo livre faço aplicativos em Shiny."
+aboutme_pt_1 <-
+  "Meu nome é Vinícius Oike Reginatto, sou economista, mestre em Economia pela Universidade de São Paulo (USP) e moro em São Paulo desde 2017. Trabalho como consultor em economia e pesquisa, focada em dados. Sou fundador da EKIO, uma consultoria que aplica a inteligência dos dados para transformar projetos e empresas."
+
+aboutme_pt_2 <-
+  "Acesse os links abaixo para conhecer mais do meu trabalho ou para entrar em contato."
 
 about_app1 <-
-"Este aplicativo permite visualizar os dados do Índice Firjan de Desenvolvimento
- Municipal (IFDM) num dashboard. O IFDM tem metodologia similar ao popular Índice
-de Desenvolvimento Humano (IDH) da ONU; contudo, o IFDM abrange um número maior
-de variáveis. Além disso, o IFDM é calculado anualmente enqunto o IDH é calculado
-apenas uma vez a cada dez anos."
+  "Este painel permite analisar o contexto dos municípios brasileiros atráves dos dados do Índice Firjan de Desenvolvimento Municipal (IFDM). O IFDM tem metodologia similar ao popular Índice de Desenvolvimento Humano (IDH) da ONU. O IFDM tem duas vantagens em comparação com o IDH. Primeiro, apesar de analisar as mesmas dimensões do IDH (educação, saúde e renda), o IFDM contempla um maior número de variáveis para compor seu índice. Segundo, o IFDM é calculado anualmente enquanto o IDH é calculado apenas uma vez a cada dez anos."
 
 about_app2 <- "A interpretação do IFDM é bastante simples: quanto maior, melhor. O mapa interativo
 permite escolher uma cidade e compará-la com a realidade do seu estado.
 Também é possível fazer uma comparação regional ou nacional, alterando o campo
-'Comparação Geográfica', mas note que isto pode levar algum tempo para carregar.
- Os quatro gráficos que aparecem abaixo do mapa ajudam a contextualizar a cidade."
+'Opções', no card do mapa, mas note que isto pode levar algum tempo para carregar.
+ Os quatro gráficos que aparecem abaixo do mapa ajudam a contextualizar o IFDM da cidade."
 
+
+# Download page documentation ----
+
+doc_colunas <- data.frame(
+  Coluna = c(
+    "ano",
+    "indicador",
+    "nome_regiao",
+    "code_muni",
+    "nome_cidade",
+    "ifdm"
+  ),
+  Tipo = c("Inteiro", "Texto", "Texto", "Inteiro", "Texto", "Numérico"),
+  Descrição = c(
+    "Ano de referência",
+    "Componente: Geral (IFDM), Educação, Saúde ou Emprego & Renda",
+    "Grande região geográfica (Norte, Nordeste, Sudeste, Sul, Centro-Oeste)",
+    "Código IBGE do município (7 dígitos)",
+    "Nome do município (sem UF)",
+    "Valor do índice (escala de 0 a 1; quanto maior, melhor)"
+  ),
+  stringsAsFactors = FALSE
+)
+
+doc_meta <- data.frame(
+  Campo = c(
+    "Cobertura geográfica",
+    "Cobertura temporal",
+    "Granularidade",
+    "Produtor dos dados"
+  ),
+  Valor = c(
+    "Brasil — 5.570 municípios",
+    "2013 a 2023 (anual)",
+    "Municipal",
+    "Firjan (Índice Firjan de Desenvolvimento Municipal)"
+  ),
+  stringsAsFactors = FALSE
+)
 
 #--------------------------------#
 
 classify_hdi <- function(x) {
-
   stopifnot(is.numeric(x))
 
   label <- dplyr::case_when(
@@ -84,11 +120,9 @@ classify_hdi <- function(x) {
   )
 
   glue::glue("{round(x, 3)} ({label})")
-
 }
 
 prep_infobox <- function(city, hdi_year = 2023) {
-
   new_names <- c("Educação", "Emprego & Renda", "Geral (IFDM)", "Saúde")
   names(new_names) <- c("idhm_e", "idhm_r", "idhm", "idhm_s")
 
@@ -98,10 +132,9 @@ prep_infobox <- function(city, hdi_year = 2023) {
       id_cols = "name_muni_full",
       names_from = "index_type",
       values_from = "hdi"
-      ) |>
+    ) |>
     dplyr::rename(dplyr::all_of(new_names)) |>
     dplyr::mutate(dplyr::across(dplyr::where(is.numeric), classify_hdi))
 
   return(df)
-
 }
