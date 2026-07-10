@@ -1,87 +1,96 @@
-prep_ranking <- function(city = "São Paulo (SP)", hdi_year, geo = "Estado") {
+# Map input$variable (an INDEX_CHOICES value) to the index_type factor label
+# used in series_data.
+VARIABLE_TO_FACTOR <- c(
+  "IDH" = "Geral (IFDM)",
+  "IDH - Educação" = "Educação",
+  "IDH - Saúde" = "Saúde",
+  "IDH - Renda" = "Emprego & Renda"
+)
 
-  if (geo == "Região") {
+# Ranked municipalities for the selected index within the comparison geography
+# (Estado / Região / Brasil). Feeds the DT next to the map.
+prep_ranking_table <- function(city, hdi_year, variable, series_geo) {
+  factor_lbl <- unname(VARIABLE_TO_FACTOR[variable])
 
-    region <- id_muni |>
-      dplyr::filter(name_muni_full == city) |>
-      dplyr::pull(name_region)
+  series_geo |>
+    dplyr::filter(index_type == factor_lbl, year == hdi_year) |>
+    dplyr::mutate(rank = as.integer(base::rank(-hdi, na.last = "keep", ties.method = "min"))) |>
+    dplyr::arrange(rank) |>
+    dplyr::transmute(
+      rank,
+      name_muni,
+      hdi,
+      is_city = name_muni_full == city
+    )
+}
 
-    df <- series_data |>
-      dplyr::filter(name_region == region, year == hdi_year) |>
-      dplyr::group_by(index_type) |>
-      dplyr::mutate(rank = base::rank(-hdi)) |>
-      dplyr::ungroup()
-  }
+prep_ranking <- function(city, hdi_year, series_geo) {
+  df <- series_geo |>
+    dplyr::filter(year == hdi_year) |>
+    dplyr::group_by(index_type) |>
+    dplyr::mutate(rank = base::rank(-hdi, ties.method = "min")) |>
+    dplyr::ungroup()
 
-  if (geo == "Estado") {
-    state <- id_muni |>
-      dplyr::filter(name_muni_full == city) |>
-      dplyr::pull(code_state)
-
-    df <- series_data |>
-      dplyr::filter(code_state == state, year == hdi_year) |>
-      dplyr::group_by(index_type) |>
-      dplyr::mutate(rank = base::rank(-hdi)) |>
-      dplyr::ungroup()
-  }
-
-  if (geo == "Brasil") {
-    df <- series_data |>
-      filter(year == hdi_year)
-  }
-
-  # Get lower and upper limits for each index (draw the lines)
   df_lines <- df |>
     dplyr::group_by(index_type) |>
     dplyr::summarise(
       xmin = min(rank, na.rm = TRUE),
       xmax = max(rank, na.rm = TRUE)
     )
-  # Filter only the selected city (draw the squares)
+
   df_city <- df |>
     dplyr::filter(name_muni_full == city) |>
     dplyr::select(index_type, rank)
 
-  return(list(limits = df_lines, ranking = df_city))
-
+  list(limits = df_lines, ranking = df_city)
 }
 
-plot_ranking <- function(city, year, geo) {
+plot_ranking <- function(city, year, geo, series_geo) {
+  df <- prep_ranking(city, year, series_geo)
 
-  df <- prep_ranking(city, year, geo)
-
-  xbreak = ifelse(geo == "Estado", 50, ifelse(geo == "Região", 100, 500))
+  subtitle <- switch(
+    geo,
+    "Estado" = "Posição entre os municípios do estado",
+    "Região" = "Posição entre os municípios da região",
+    "Brasil" = "Posição no ranking nacional"
+  )
 
   ggplot() +
     geom_segment(
       data = df$limits,
-      aes(x = xmin, xend = xmax, y = index_type, yend = index_type)
+      aes(x = xmin, xend = xmax, y = index_type, yend = index_type),
+      color = EKIO_GRID,
+      linewidth = 1.1
     ) +
     geom_point(
       data = df$ranking,
-      aes(x = rank, y = index_type),
+      aes(x = rank, y = index_type, fill = index_type),
       shape = 22,
-      size = 3
+      size = 5,
+      color = "white"
     ) +
     geom_text(
       data = df$ranking,
-      aes(x = rank, y = index_type, label = rank),
-      size = 3,
-      nudge_y = 0.15
+      aes(x = rank, y = index_type, label = paste0(rank, "º")),
+      size = 4,
+      color = EKIO_INK,
+      nudge_y = 0.3
     ) +
+    scale_x_reverse() +
+    scale_fill_manual(values = INDEX_PAL_LABELLED) +
+    guides(fill = "none") +
     labs(
-      x = "Ranking",
+      x = "Ranking (1 = melhor)",
       y = NULL,
-      title = glue::glue("Ranking: {city}")
+      subtitle = subtitle
     ) +
-    # scale_x_continuous(breaks = c(1, seq(50, round(max(df$limits$xmax), -2), by = xbreak))) +
-    theme_minimal() +
+    theme_ekio(base_size = 12) +
     theme(
-      panel.grid = element_blank(),
+      panel.grid.major.y = element_blank(),
       panel.grid.major.x = element_line(
-        linewidth = 0.25,
+        linewidth = 0.5,
         linetype = 2,
-        color = "gray80"
-        )
+        color = EKIO_GRID
+      )
     )
 }

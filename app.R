@@ -1,172 +1,416 @@
-library(shiny)
-library(shinydashboard)
+# Packages and theme ----------------------------------------------------------
 
-header <- dashboardHeader(
-  title = HTML("Dashboard IFDM - Vinicius Oike"),
-  titleWidth = 550
+library(shiny)
+library(bslib)
+library(dplyr)
+library(tmap)
+library(echarts4r)
+
+# brand.yml is loaded implicitly by bs_theme(brand = TRUE) — referenced here so
+# dependency tools (renv) track it.
+if (!requireNamespace("brand.yml", quietly = TRUE)) {
+  stop("Package 'brand.yml' is required for the EKIO theme (_brand.yml).")
+}
+
+# Supporting R/ scripts (_setup.R, ekio_ui.R, map_hdi.R, plot_*.R, utils.R) are
+# auto-sourced by Shiny before this file runs.
+
+theme <- bs_theme(version = 5, brand = TRUE) |>
+  bs_add_rules(readLines("styles.css"))
+
+# Choices for the index shown on the map / KPIs. Names are display labels;
+# values are the keys understood by get_map_variable() (see R/map_hdi.R).
+INDEX_CHOICES <- c(
+  "Geral" = "IDH",
+  "Educação" = "IDH - Educação",
+  "Saúde" = "IDH - Saúde",
+  "Emprego & Renda" = "IDH - Renda"
 )
 
-sidebar <- dashboardSidebar(
-  sidebarMenu(
-    menuItem("Dashboard", icon = icon("dashboard"), tabName = "dashboard"),
-      selectizeInput("city_sel",
-        choices = NULL,
-        label = "Escolha Cidade",
-        selected = "São Paulo (SP)"),
-    selectInput("variable",
-                label = "Índice para visualizar",
-                choices = names(vl),
-                selected = "IDH"),
-    selectInput("year_sel",
-                label = "Ano",
-                choices = 2005:2016,
-                selected = 2010),
-    selectInput("palette",
-                label = "Paleta de cores",
-                choices = names(pals),
-                selected = "3 (Vermelho-Azul)"),
-    selectInput("style",
-                label = "Tipo de mapa",
-                choices = names(styles),
-                selected = "Cluster"),
-    numericInput("nbreaks",
-                 label = "Número de grupos (Não se aplica ao Básico)",
-                 value = 6,
-                 min = 3,
-                 max = 10),
-    selectInput("geo",
-                label = "Comparação Geográfica",
-                choices = c("Estado", "Região", "Brasil"),
-                selected = "Estado"),
-    menuItem("Baixar dados", icon = icon("file-download"), tabName = "download_data"),
-    menuItem("Sobre mim", icon = icon("info-circle"), tabName = "about_me")
+# KPI cards: internal index_type key, factor label in series_data, display label
+KPI_INDICES <- list(
+  list(key = "overall", factor = "Geral (IFDM)", label = "IFDM Geral"),
+  list(key = "education", factor = "Educação", label = "Educação"),
+  list(key = "health", factor = "Saúde", label = "Saúde"),
+  list(key = "income", factor = "Emprego & Renda", label = "Emprego & Renda")
+)
+
+YEARS <- 2023:2013
+
+# Sidebar ----------------------------------------------------------------------
+
+ekio_sidebar <- sidebar(
+  width = 240,
+  bg = "#0D1B2A",
+  class = "ekio-sidebar",
+  div(
+    class = "ekio-brand",
+    h1("EKIO"),
+    p("Desenvolvimento Municipal")
+  ),
+  tags$nav(
+    class = "ekio-nav",
+    ekio_nav_section(
+      "Painel",
+      ekio_nav_item("dashboard", "Dashboard", "◉", active = TRUE)
+    ),
+    ekio_nav_section(
+      "Dados",
+      ekio_nav_item("download_data", "Baixar dados", "⤓")
+    ),
+    ekio_nav_section(
+      NULL,
+      ekio_nav_item("about", "Sobre", "ⓘ")
+    )
+  ),
+  div(
+    class = "ekio-sidebar-footer",
+    div(class = "ekio-updated-label", "Fonte"),
+    div(class = "ekio-updated-date", "IFDM 2025 · Base 2023")
   )
 )
 
-body <- dashboardBody(
-  tabItems(
-    tabItem("dashboard",
-            # Dashboard content
-            fluidRow(
-              column(
-                12,
-                h2("Índice de Desenvolvimento Humano (Firjan)")
-              )
-            ),
-            fluidRow(
-              box(
-                width = 9,
-                solidHeader = TRUE,
-                shinycssloaders::withSpinner(
-                  tmapOutput("map", width = "100%", height = 700)
-                )
-              ),
-              column(
-                3,
-                infoBoxOutput("box_hdi", width = NULL),
-                infoBoxOutput("box_hdi_educ", width = NULL),
-                infoBoxOutput("box_hdi_income", width = NULL),
-                infoBoxOutput("box_hdi_health", width = NULL),
-                tabBox(
-                  title = "",
-                  width = NULL,
-                  # The id lets us use input$tabset1 on the server to find the current tab
-                  id = "tabset1", height = "300px",
-                  tabPanel("Sobre", HTML(text_about)),
-                  tabPanel("Classificação", HTML(text_classification)),
-                  tabPanel("Como usar", HTML(text_use)),
-                  tabPanel("Metodologia", HTML(text_methods))
-                )
-              )
-            ),
-            fluidRow(
-              column(6,
-                     box(
-                       width = NULL,
-                       solidHeader = TRUE,
-                       collapsible = TRUE,
-                       plotOutput("plot_histogram")
-                     )),
-              column(6,
-                     box(
-                       width = NULL,
-                       solidHeader = TRUE,
-                       collapsible = TRUE,
-                       plotOutput("plot_ranking")
-                     ))
-            ),
-            fluidRow(
-              column(6, plotlyOutput("plot_series_facet")),
-              column(6, plotlyOutput("plot_series"))
-            )
-    ),
-    tabItem("download_data",
-      fluidRow(column(12, h2("Baixar os dados"))),
-      fluidRow(column(12)),
-      fluidRow(column(width = 12, downloadButton("download", "Download (csv)"))),
-      box(
-        title = "Amostra dos dados",
-        width = NULL,
-        status = "primary",
-        solidHeader = TRUE,
-        height = "550px",
-        DT::DTOutput("table_preview")
-        )
-    ),
-    tabItem("about_me",
-    dashboardBody(
-      fluidRow(
-        column(5,
-               tags$div(
-                 class = "container-fluid",
-                 tags$h1("Vinicius Oike Reginatto"),
-                 tags$h3("Sobre mim"),
-                 tags$p(aboutme_pt),
-                 tags$h3("Sobre o app"),
-                 tags$p(about_app1),
-                 tags$p(about_app2),
-                 tags$h5("My links:"),
-                 tags$ul(
-                   tags$li(tags$a(href = "https://twitter.com/viniciusoike", icon("twitter"), "Twitter")),
-                   tags$li(tags$a(href = "https://github.com/viniciusoike", icon("github"), "GitHub")),
-                   tags$li(tags$a(href = "https://www.linkedin.com/in/vinicius-oike-993826a9/", icon("linkedin"), "LinkedIn")),
-                   tags$li(tags$a(href = "https://restateinsight.com", icon("globe"), "Site Pessoal"))
-                 )))
+# Sidebar links drive the hidden navset; active state toggles client-side.
+nav_js <- "
+function ekioActivateNav(el) {
+  $('.ekio-nav-item').removeClass('active').removeAttr('aria-current');
+  $(el).addClass('active').attr('aria-current', 'page');
+  Shiny.setInputValue('sidebar_nav', $(el).data('value'));
+}
+$(document).on('click', '.ekio-nav-item', function() {
+  ekioActivateNav(this);
+});
+$(document).on('keydown', '.ekio-nav-item', function(e) {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    ekioActivateNav(this);
+  }
+});
+"
+
+# Pages ------------------------------------------------------------------------
+
+map_options_popover <- popover(
+  tags$a(
+    class = "chart-tag",
+    href = "#",
+    style = "cursor:pointer;",
+    `aria-label` = "Opções do mapa",
+    "⚙ Opções"
+  ),
+  title = "Opções do mapa",
+  selectInput(
+    "palette",
+    "Paleta de cores",
+    choices = names(pals),
+    selected = "3 (Vermelho-Azul)"
+  ),
+  selectInput(
+    "style",
+    "Tipo de mapa",
+    choices = names(styles),
+    selected = "Cluster"
+  ),
+  numericInput(
+    "nbreaks",
+    "Número de grupos",
+    value = 6,
+    min = 3,
+    max = 10
+  )
+)
+
+page_dashboard <- tagList(
+  page_header(
+    "Índice FIRJAN de Desenvolvimento Municipal",
+    "Mapa interativo e séries do IFDM para os municípios brasileiros (2013–2023)."
+  ),
+  div(
+    class = "filter-bar",
+    filter_group(
+      "Cidade",
+      selectizeInput(
+        "city_sel",
+        NULL,
+        choices = NULL,
+        selected = "São Paulo (SP)",
+        width = "240px"
       )
-
-  )))
+    ),
+    filter_group(
+      "Índice",
+      class = "filter-chips",
+      radioButtons(
+        "variable",
+        NULL,
+        inline = TRUE,
+        choices = INDEX_CHOICES,
+        selected = "IDH"
+      )
+    ),
+    filter_group(
+      "Ano",
+      selectInput(
+        "year_sel",
+        NULL,
+        choices = YEARS,
+        selected = 2023,
+        width = "90px"
+      )
+    ),
+    filter_group(
+      "Comparação",
+      style = "margin-left:auto;",
+      selectInput(
+        "geo",
+        NULL,
+        choices = c("Estado", "Região", "Brasil"),
+        selected = "Estado",
+        width = "120px"
+      )
+    )
+  ),
+  uiOutput("kpi_grid"),
+  layout_columns(
+    col_widths = c(8, 4),
+    card(
+      full_screen = TRUE,
+      card_header(
+        class = "chart-card-header",
+        span(textOutput("map_title", inline = TRUE)),
+        map_options_popover
+      ),
+      card_body(
+        class = "p-0",
+        shinycssloaders::withSpinner(
+          tmap::tmapOutput("map", width = "100%", height = 560)
+        )
+      )
+    ),
+    card(
+      full_screen = TRUE,
+      card_header(
+        class = "chart-card-header",
+        span(textOutput("ranking_title", inline = TRUE)),
+        span(class = "chart-tag", "ranking")
+      ),
+      card_body(DT::DTOutput("ranking_table"))
+    )
+  ),
+  layout_columns(
+    col_widths = c(6, 6),
+    chart_card(
+      "Distribuição do IFDM",
+      "Ranking relativo (região)",
+      plotOutput("plot_histogram", height = "320px")
+    ),
+    chart_card(
+      "Ranking",
+      "Ranking relativo (região)",
+      plotOutput("plot_ranking", height = "320px")
+    )
+  ),
+  layout_columns(
+    col_widths = c(6, 6),
+    chart_card(
+      "Evolução dos indicadores",
+      "Série Histórica",
+      echarts4r::echarts4rOutput("plot_series", height = "320px")
+    ),
+    chart_card(
+      "Benchmark",
+      "Cidade × Brasil (média)",
+      navset_pill(
+        nav_panel(
+          "Geral",
+          echarts4r::echarts4rOutput("plot_bench_overall", height = "270px")
+        ),
+        nav_panel(
+          "Saúde",
+          echarts4r::echarts4rOutput("plot_bench_health", height = "270px")
+        ),
+        nav_panel(
+          "Emprego & Renda",
+          echarts4r::echarts4rOutput("plot_bench_income", height = "270px")
+        ),
+        nav_panel(
+          "Educação",
+          echarts4r::echarts4rOutput("plot_bench_education", height = "270px")
+        )
+      )
+    )
+  )
 )
 
-ui <- dashboardPage(
-  header,
-  sidebar,
-  body
+page_download <- tagList(
+  page_header(
+    "Baixar os dados",
+    "Série completa do IFDM por município (2013–2023)."
+  ),
+  div(
+    class = "filter-bar",
+    downloadButton("download", "Download (csv)", class = "btn-sm"),
+    downloadButton("download_xlsx", "Download (xlsx)", class = "btn-sm ms-2")
+  ),
+  chart_card(
+    "Amostra dos dados",
+    "csv · primeiras 1.000 linhas",
+    full_screen = TRUE,
+    card_body(DT::DTOutput("table_preview"))
+  ),
+  layout_columns(
+    col_widths = c(8, 4),
+    chart_card(
+      "Documentação das colunas",
+      NULL,
+      full_screen = FALSE,
+      card_body(DT::DTOutput("table_docs"))
+    ),
+    card(
+      card_header(class = "chart-card-header", span("Metadados")),
+      card_body(DT::DTOutput("table_meta"))
+    )
+  )
 )
 
-# Server
+page_about <- tagList(
+  page_header("Sobre", "Sobre este painel, o IFDM e a EKIO."),
+  div(
+    class = "about-content",
+    h3("O painel"),
+    p(HTML(about_app1)),
+    p(HTML(about_app2)),
+    h3("Sobre o IFDM"),
+    div(
+      class = "about-grid",
+      about_card(
+        "Três eixos",
+        "O IFDM mede o desenvolvimento municipal em Educação, Saúde e Emprego & Renda."
+      ),
+      about_card(
+        "Cobertura temporal",
+        "Série anual de 2013 a 2023, com metodologia revisada (IFDM 2025, ano-base 2023)."
+      ),
+      about_card(
+        "Produtor dos Dados",
+        "Firjan (Índice Firjan de Desenvolvimento Municipal). Consultado pela última vez em 05/2026."
+      )
+    ),
+    h3("Classificação"),
+    HTML(text_classification),
+    h3("Como usar"),
+    p(HTML(text_use)),
+    h3("Metodologia"),
+    HTML(text_methods),
+    h3("Autor"),
+    p(HTML(aboutme_pt_1)),
+    p(HTML(aboutme_pt_2)),
+    tags$ul(
+      tags$li(tags$a(
+        href = "https://github.com/viniciusoike",
+        "GitHub"
+      )),
+      tags$li(tags$a(
+        href = "https://www.linkedin.com/in/vinicius-oike-993826a9/",
+        "LinkedIn"
+      )),
+      tags$li(tags$a(
+        href = "https://restateinsight.com",
+        "Site Pessoal"
+      ))
+    )
+  )
+)
+
+# UI ---------------------------------------------------------------------------
+
+ui <- page_sidebar(
+  window_title = "Dashboard IFDM — EKIO",
+  theme = theme,
+  fillable = FALSE,
+  sidebar = ekio_sidebar,
+  div(
+    class = "ekio-pages",
+    navset_hidden(
+      id = "main_nav",
+      nav_panel_hidden("dashboard", page_dashboard),
+      nav_panel_hidden("download_data", page_download),
+      nav_panel_hidden("about", page_about)
+    )
+  ),
+  tags$script(HTML(nav_js))
+)
+
+# Server -----------------------------------------------------------------------
+
 server <- function(input, output, session) {
+  # Navigation ----
+  observeEvent(input$sidebar_nav, {
+    nav_select("main_nav", input$sidebar_nav)
+  })
 
-  updateSelectizeInput(session, "city_sel", choices = city_list, server = TRUE)
+  # Inputs ----
+  updateSelectizeInput(
+    session,
+    "city_sel",
+    choices = city_list,
+    selected = "São Paulo (SP)",
+    server = TRUE
+  )
 
-  city <- reactive({input$city_sel})
-  year <- reactive({input$year_sel})
-  geo <- reactive({input$geo})
+  city <- reactive(input$city_sel)
+  year <- reactive(as.integer(input$year_sel))
+  geo <- reactive(input$geo)
 
-  # Map
-
-  # Prepare the data for the map
-  # mapdata <- reactive(prep_mapdata(input$city_sel, input$geo))
-  mapborder <- reactive(get_state_border(input$city_sel, input$geo))
-  # Output the map
-  output$map <- renderTmap({
-
+  # Single lookup of the city's geo context — shared by all prep_* functions
+  city_context <- reactive({
     req(city())
-    req(year())
-    req(palette())
-    req(geo())
+    ctx <- dplyr::filter(id_muni, name_muni_full == city())
+    list(
+      code_state = ctx$code_state,
+      code_region = ctx$code_region,
+      name_region = ctx$name_region,
+      abbrev_state = stringr::str_extract(city(), "(?<=\\()[A-Z]{2}(?=\\))")
+    )
+  })
 
+  # sf subset recomputed only when city or geo changes, not on palette/style/year
+  map_shp <- reactive({
+    req(city_context())
+    prep_mapdata(city_context(), geo())
+  })
+
+  # series_data slice for the selected geo — shared by ranking table, ranking
+  # plot, and histogram so the geo filter runs once per city/geo change
+  series_geo <- reactive({
+    req(city_context())
+    switch(
+      geo(),
+      "Região" = dplyr::filter(
+        series_data,
+        name_region == city_context()$name_region
+      ),
+      "Estado" = dplyr::filter(
+        series_data,
+        code_state == city_context()$code_state
+      ),
+      "Brasil" = series_data
+    )
+  })
+
+  # Map ----
+  mapborder <- reactive(get_state_border(city_context(), geo()))
+
+  output$map_title <- renderText({
+    req(city())
+    lbl <- names(INDEX_CHOICES)[match(input$variable, INDEX_CHOICES)]
+    paste0(city(), " — ", lbl, " (", year(), ")")
+  })
+
+  output$map <- renderTmap({
+    req(city(), year(), input$palette, geo(), map_shp())
     map_hdi(
-      shp = NULL,
+      shp = map_shp(),
       city = city(),
       year = year(),
       variable = input$variable,
@@ -179,91 +423,170 @@ server <- function(input, output, session) {
     )
   })
 
-  # Plots
+  # Ranking table ----
+  ranking_tbl <- reactive({
+    req(city(), year(), input$variable, series_geo())
+    prep_ranking_table(city(), year(), input$variable, series_geo())
+  })
 
-  # Plot line ranking
-  output$plot_ranking <- renderPlot({
+  output$ranking_title <- renderText({
     req(city())
-    plot_ranking(city(), year(), geo())
-  }, res = 96)
+    lbl <- names(INDEX_CHOICES)[match(input$variable, INDEX_CHOICES)]
+    paste0("Ranking — ", lbl, " · ", geo(), " (", year(), ")")
+  })
 
-  # Plot histogram
-  output$plot_histogram <- renderPlot({
-    req(city())
-    plot_histogram(city(), year(), geo())
-  }, res = 96)
+  output$ranking_table <- DT::renderDT({
+    d <- ranking_tbl()
+    sel_muni <- d$name_muni[d$is_city]
 
-  # Prepare the data for the time-series plots
+    tbl <- d |>
+      dplyr::transmute(`#` = rank, Município = name_muni, IFDM = hdi)
+
+    dt <- DT::datatable(
+      tbl,
+      rownames = FALSE,
+      selection = "none",
+      options = list(
+        pageLength = 12,
+        dom = "ftip",
+        columnDefs = list(
+          list(className = "dt-center", targets = c(0, 2))
+        ),
+        language = list(
+          url = "//cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json"
+        )
+      )
+    ) |>
+      DT::formatRound("IFDM", digits = 3, mark = ".", dec.mark = ",")
+
+    if (length(sel_muni) == 1) {
+      dt <- DT::formatStyle(
+        dt,
+        "Município",
+        target = "row",
+        fontWeight = DT::styleEqual(sel_muni, "700"),
+        backgroundColor = DT::styleEqual(sel_muni, "#EBF2FA")
+      )
+    }
+    dt
+  })
+
+  # KPI cards ----
+  output$kpi_grid <- renderUI({
+    req(city(), year())
+    d <- df_series()
+
+    cards <- lapply(KPI_INDICES, function(ix) {
+      s <- d |>
+        dplyr::filter(index_type == ix$factor) |>
+        dplyr::arrange(year)
+      cur <- s$hdi[s$year == year()]
+      prev <- s$hdi[s$year == (year() - 1L)]
+      delta <- if (length(cur) == 1 && length(prev) == 1) {
+        cur - prev
+      } else {
+        NA_real_
+      }
+      label_y <- if (year() > min(YEARS)) paste("vs", year() - 1L) else "—"
+      kpi_card(
+        label = ix$label,
+        value = fmt_ifdm(if (length(cur) == 1) cur else NA_real_),
+        delta = ifdm_delta_lbl(delta),
+        period = label_y,
+        spark_values = s$hdi,
+        color = INDEX_COLOR_CLASS[[ix$key]],
+        dir = pp_dir(delta)
+      )
+    })
+
+    div(class = "kpi-grid", cards)
+  })
+
+  # Plots ----
+  output$plot_ranking <- renderPlot(
+    {
+      req(city(), series_geo())
+      plot_ranking(city(), year(), geo(), series_geo())
+    },
+    res = 96
+  )
+
+  output$plot_histogram <- renderPlot(
+    {
+      req(city(), series_geo())
+      plot_histogram(city(), year(), series_geo())
+    },
+    res = 96
+  )
+
   df_series <- reactive({
     req(city())
-    prep_series_data(city())}
-    )
+    prep_series_data(city())
+  })
   df_benchmark <- reactive(prep_benchmark(df_series()))
 
-  # Plot Time Series
-  output$plot_series <- renderPlotly({
+  output$plot_series <- echarts4r::renderEcharts4r({
     plot_series(df_series())
   })
-
-  # Plot series comparison
-  output$plot_series_facet <- renderPlotly({
-    plot_series_comparison(df_benchmark())
+  # Benchmark: one city-vs-média chart per index, split across pill tabs so the
+  # card stays compact. Each tab is an independent echarts widget.
+  output$plot_bench_overall <- echarts4r::renderEcharts4r({
+    plot_benchmark(df_benchmark(), "Geral (IFDM)")
+  })
+  output$plot_bench_health <- echarts4r::renderEcharts4r({
+    plot_benchmark(df_benchmark(), "Saúde")
+  })
+  output$plot_bench_income <- echarts4r::renderEcharts4r({
+    plot_benchmark(df_benchmark(), "Emprego & Renda")
+  })
+  output$plot_bench_education <- echarts4r::renderEcharts4r({
+    plot_benchmark(df_benchmark(), "Educação")
   })
 
-  # Boxes (with big numbers)
-
-  # Prepare data
-  df_box <- reactive({
-    req(city())
-    req(year())
-
-    prep_infobox(city(), year())
+  # Download ----
+  df_download <- reactive({
+    series_data |>
+      dplyr::select(year, index_type, name_region, code_muni, name_muni, hdi) |>
+      dplyr::rename(
+        ano = year,
+        indicador = index_type,
+        nome_regiao = name_region,
+        nome_cidade = name_muni,
+        ifdm = hdi
+      )
   })
 
-  ## Boxes with key numbers
-  output$box_hdi <- renderInfoBox({
-    infoBox("IFDM (Geral)", value = df_box()$idhm, icon = icon("compass"), fill = TRUE)
-  })
-  output$box_hdi_educ <- renderInfoBox({
-    infoBox("Educação", value = df_box()$idhm_e, icon = icon("graduation-cap"), fill = TRUE)
-  })
-  output$box_hdi_income <- renderInfoBox({
-    infoBox("Renda", value = df_box()$idhm_r, icon = icon("money-bill-alt"), fill = TRUE)
-  })
-  output$box_hdi_health <- renderInfoBox({
-    infoBox("Saúde", value = df_box()$idhm_s, icon = icon("briefcase-medical"), fill = TRUE)
-  })
-
-  # Table output
   output$table_preview <- DT::renderDT({
     DT::datatable(head(df_download(), 1000), options = list(pageLength = 10))
   })
 
-  df_download <- reactive({
+  output$download <- downloadHandler(
+    filename = function() "data_firjan_ifdm.csv",
+    content = function(file) write.csv(df_download(), file, row.names = FALSE)
+  )
 
-    df <- series_data |>
-      dplyr::select(
-        year, index_type, name_region, code_muni, name_muni, hdi
-        ) |>
-      dplyr::rename(
-        ano = year, indicador = index_type, nome_regiao = name_region,
-        nome_cidade = name_muni, ifdm = hdi
-      )
+  output$download_xlsx <- downloadHandler(
+    filename = function() "data_firjan_ifdm.xlsx",
+    content = function(file) writexl::write_xlsx(df_download(), file)
+  )
 
-    df
-
+  output$table_docs <- DT::renderDT({
+    DT::datatable(
+      doc_colunas,
+      rownames = FALSE,
+      selection = "none",
+      options = list(dom = "t", pageLength = 10, ordering = FALSE)
+    )
   })
 
-  output$download <- downloadHandler(
-    filename = function() {
-      paste0("data_firjan_ifdm", ".csv")
-    },
-    content = function(file) {
-      write.csv(df_download(), file)
-    }
-  )
+  output$table_meta <- DT::renderDT({
+    DT::datatable(
+      doc_meta,
+      rownames = FALSE,
+      selection = "none",
+      options = list(dom = "t", pageLength = 10, ordering = FALSE)
+    )
+  })
 }
 
-# Run the app
 shinyApp(ui, server)
-
