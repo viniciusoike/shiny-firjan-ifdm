@@ -48,6 +48,10 @@ data/shape_muni.gpkg
 # Local data backups (kept out of version control)
 data/_archive_*/
 
+# Posit Connect / shinyapps.io deployment records (machine-specific)
+rsconnect/
+.posit/publish/deployments/
+
 # OS / editor / R session artifacts
 .DS_Store
 Rplots.pdf
