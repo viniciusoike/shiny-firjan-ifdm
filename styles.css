@@ -24,7 +24,7 @@
 
 /* Sidebar ------------------------------------------------------------- */
 
-.ekio-sidebar > .sidebar-content {
+.ekio-sidebar>.sidebar-content {
   padding: 0;
   gap: 0;
 }
@@ -181,13 +181,33 @@
   height: 3px;
 }
 
-.kpi-card.blue::before   { background: var(--ekio-blue-700); }
-.kpi-card.teal::before   { background: var(--ekio-teal); }
-.kpi-card.orange::before { background: var(--ekio-orange); }
-.kpi-card.amber::before  { background: #D69E2E; }
-.kpi-card.purple::before { background: #805AD5; }
-.kpi-card.green::before  { background: #38A169; }
-.kpi-card.red::before    { background: #C53030; }
+.kpi-card.blue::before {
+  background: var(--ekio-blue-700);
+}
+
+.kpi-card.teal::before {
+  background: var(--ekio-teal);
+}
+
+.kpi-card.orange::before {
+  background: var(--ekio-orange);
+}
+
+.kpi-card.amber::before {
+  background: #D69E2E;
+}
+
+.kpi-card.purple::before {
+  background: #805AD5;
+}
+
+.kpi-card.green::before {
+  background: #38A169;
+}
+
+.kpi-card.red::before {
+  background: #C53030;
+}
 
 .kpi-label {
   font-size: 11px;
@@ -217,9 +237,17 @@
   font-weight: 600;
 }
 
-.kpi-delta.up      { color: #38A169; }
-.kpi-delta.down    { color: #C53030; }
-.kpi-delta.neutral { color: var(--ekio-gray-600); }
+.kpi-delta.up {
+  color: #38A169;
+}
+
+.kpi-delta.down {
+  color: #C53030;
+}
+
+.kpi-delta.neutral {
+  color: var(--ekio-gray-600);
+}
 
 .kpi-period {
   color: var(--ekio-gray-500);
@@ -265,7 +293,7 @@
   gap: 8px;
 }
 
-.filter-group > label {
+.filter-group>label {
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
@@ -304,6 +332,7 @@
   position: absolute;
   opacity: 0;
   pointer-events: none;
+  margin-top: 0;
 }
 
 .filter-chips .form-check-label {
@@ -316,6 +345,8 @@
   color: var(--ekio-gray-700);
   cursor: pointer;
   transition: all 0.15s;
+  vertical-align: middle;
+  line-height: 1;
 }
 
 .filter-chips .form-check-label:hover {
@@ -323,14 +354,14 @@
   color: var(--ekio-blue-700);
 }
 
-.filter-chips .form-check-input:checked + .form-check-label {
+.filter-chips .form-check-input:checked+.form-check-label {
   background: var(--ekio-blue-700);
   border-color: var(--ekio-blue-700);
   color: #fff;
 }
 
 /* The radio is visually hidden; surface keyboard focus on its chip label. */
-.filter-chips .form-check-input:focus-visible + .form-check-label {
+.filter-chips .form-check-input:focus-visible+.form-check-label {
   outline: 2px solid var(--ekio-blue-400);
   outline-offset: 1px;
 }
@@ -431,15 +462,25 @@
 /* Sobre ----------------------------------------------------------------- */
 
 .about-content h3 {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 700;
   margin: 20px 0 8px;
 }
 
 .about-content > p {
-  max-width: 720px;
-  font-size: 13px;
+  max-width: 800px;
+  font-size: 16px;
   color: var(--ekio-gray-700);
+}
+
+.about-content ul {
+  font-size: 16px;
+  color: var(--ekio-gray-700);
+  max-width: 800px;
+}
+
+.about-content li {
+  margin-bottom: 4px;
 }
 
 .about-grid {
@@ -447,7 +488,7 @@
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 12px;
   margin: 12px 0 8px;
-  max-width: 1000px;
+  max-width: 800px;
 }
 
 .about-card {
@@ -458,13 +499,41 @@
 }
 
 .about-card h4 {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   margin: 0 0 6px;
 }
 
 .about-card p {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--ekio-gray-700);
   margin: 0;
+}
+
+/* Methodological notes (beside the KPIs) -------------------------------- */
+
+.notes-accordion {
+  --bs-accordion-btn-padding-y: 0.5rem;
+  --bs-accordion-btn-padding-x: 0.75rem;
+  --bs-accordion-body-padding-y: 0.625rem;
+  --bs-accordion-body-padding-x: 0.75rem;
+  box-shadow: var(--ekio-shadow-sm);
+  border-radius: var(--ekio-radius);
+  overflow: hidden;
+}
+
+.notes-accordion .accordion-button {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ekio-gray-700);
+}
+
+.notes-accordion .accordion-body {
+  font-size: 12px;
+  color: var(--ekio-gray-700);
+}
+
+.notes-accordion .accordion-body ul {
+  margin: 0;
+  padding-left: 1.1rem;
 }
