@@ -1,6 +1,6 @@
 # Dashboard IFDM
 
-[![Abrir app](https://img.shields.io/badge/Shiny-Abrir%20Dashboard-blue?logo=r)](https://viniciusoike.shinyapps.io/shiny-firjan-ifdm)
+[![Abrir app](https://img.shields.io/badge/Shiny-Abrir%20Dashboard-blue?logo=r)](https://viniciusoike-shiny-firjan-ifdm.share.connect.posit.cloud)
 
 Dashboard interativo que visualiza o desenvolvimento municipal em todos os
 municípios do Brasil, com base no **Índice FIRJAN de Desenvolvimento Municipal
@@ -13,7 +13,7 @@ revisada). O painel oferece um mapa coroplético interativo, comparação do
 município selecionado com seu estado / região / Brasil, e a evolução de cada
 indicador ao longo do tempo.
 
-[**→ Abrir o dashboard**](https://viniciusoike.shinyapps.io/shiny-firjan-ifdm)
+[**→ Abrir o dashboard**](https://viniciusoike-shiny-firjan-ifdm.share.connect.posit.cloud)
 
 ---
 
@@ -22,6 +22,20 @@ An interactive dashboard for Brazil's FIRJAN Municipal Development Index (IFDM)
 5 570 Brazilian municipalities. Built with R Shiny. App is in Portuguese.
 
 ![Dashboard IFDM preview](docs/preview.png)
+
+## Features
+
+- **Choropleth map** — filter by year (2013–2023) and any of the four IFDM
+  dimensions (Overall, Education, Health, Employment & Income).
+- **Autocomplete search** — find any of the 5 570 municipalities, ordered by
+  population.
+- **Benchmarks** — ranking distribution and score comparison against the
+  selected state, region, or national average.
+- **Time series** — annual evolution of each indicator for the selected city.
+- **Data download** — export the full municipal dataset as CSV or XLSX.
+- **About section** — methodology notes, IFDM interpretation scale
+  (High ≥ 0.8 / Moderate 0.6–0.8 / Regular 0.4–0.6 / Low ≤ 0.4), and
+  contact information.
 
 ## Built with
 
