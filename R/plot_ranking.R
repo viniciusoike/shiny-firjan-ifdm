@@ -18,7 +18,7 @@ prep_ranking_table <- function(city, hdi_year, variable, series_geo) {
     dplyr::arrange(rank) |>
     dplyr::transmute(
       rank,
-      name_muni,
+      name_muni = name_muni_full,
       hdi,
       is_city = name_muni_full == city
     )

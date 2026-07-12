@@ -1,5 +1,4 @@
 prep_mapdata <- function(ctx, geo = "Estado") {
-
   if (geo == "Estado") {
     shp <- dplyr::filter(firjan_full, code_state %in% ctx$code_state)
   } else if (geo == "Região") {
@@ -9,11 +8,9 @@ prep_mapdata <- function(ctx, geo = "Estado") {
   }
 
   return(shp)
-
 }
 
 get_state_border <- function(ctx, geo = "Região") {
-
   if (geo == "Região") {
     state <- dplyr::filter(state_border, code_region == ctx$code_region)
   } else if (geo == "Brasil") {
@@ -22,11 +19,9 @@ get_state_border <- function(ctx, geo = "Região") {
     state <- NULL
   }
   return(state)
-
 }
 
 get_map_variable <- function(year, variable) {
-
   vl <- c(
     "IDH" = "overall",
     "IDH - Educação" = "education",
@@ -38,17 +33,17 @@ get_map_variable <- function(year, variable) {
 }
 
 map_hdi <- function(
-    shp = NULL,
-    city = "Porto Alegre (RS)",
-    year = 2023,
-    variable = "IDH",
-    title = variable,
-    pal = "3 (Vermelho-Azul)",
-    style = "Cluster",
-    n = 6,
-    geo = "Estado",
-    border = NULL) {
-
+  shp = NULL,
+  city = "Porto Alegre (RS)",
+  year = 2023,
+  variable = "IDH",
+  title = variable,
+  pal = "3 (Vermelho-Azul)",
+  style = "Cluster",
+  n = 6,
+  geo = "Estado",
+  border = NULL
+) {
   if (is.null(shp)) {
     shp <- prep_mapdata(city, geo)
   }
@@ -58,9 +53,16 @@ map_hdi <- function(
 
   fill_col <- get_map_variable(year, variable)
 
-  popup_vars <- paste(c("overall", "education", "income", "health"), year, sep = "_")
+  popup_vars <- paste(
+    c("overall", "education", "income", "health"),
+    year,
+    sep = "_"
+  )
   names(popup_vars) <- c(
-    "IFDM", "IFDM - Educação", "IFDM - Emprego & Renda", "IFDM - Saúde"
+    "IFDM",
+    "IFDM - Educação",
+    "IFDM - Emprego & Renda",
+    "IFDM - Saúde"
   )
 
   # tmap v4: scale + legend are objects passed to tm_polygons(); the visual
@@ -80,8 +82,8 @@ map_hdi <- function(
       col = "gray50",
       lwd = 0.5,
       id = "name_muni",
-      popup.vars = popup_vars,
-      popup.format = list(digits = 3)
+      popup = tm_popup(vars = popup_vars, format = tm_label_format(digits = 3)),
+      zindex = 401
     )
 
   # Region/country comparisons overlay the bounding state/region borders.
@@ -89,6 +91,14 @@ map_hdi <- function(
     m <- m +
       tm_shape(border) +
       tm_borders(col = "gray30")
+  }
+
+  # Highlight the selected city with a branded orange border.
+  city_shp <- dplyr::filter(shp, name_muni_full == city)
+  if (nrow(city_shp) > 0) {
+    m <- m +
+      tm_shape(city_shp) +
+      tm_borders(col = "#DD6B20", lwd = 2.5, zindex = 402)
   }
 
   m +

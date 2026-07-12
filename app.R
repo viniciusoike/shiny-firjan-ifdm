@@ -407,21 +407,79 @@ server <- function(input, output, session) {
     paste0(city(), " — ", lbl, " (", year(), ")")
   })
 
+  # Full re-render only when the shape data changes (city or geo).
+  # Visual params (year, variable, palette, style, n) are isolated to
+  # avoid sending geometry to Leaflet on every click — see observer below.
   output$map <- renderTmap({
-    req(city(), year(), input$palette, geo(), map_shp())
+    req(map_shp())
     map_hdi(
       shp = map_shp(),
-      city = city(),
-      year = year(),
-      variable = input$variable,
-      title = city(),
-      pal = input$palette,
-      style = input$style,
-      n = input$nbreaks,
-      geo = geo(),
-      border = mapborder()
+      city = isolate(city()),
+      year = isolate(year()),
+      variable = isolate(input$variable),
+      title = isolate(city()),
+      pal = isolate(input$palette),
+      style = isolate(input$style),
+      n = isolate(input$nbreaks),
+      geo = isolate(geo()),
+      border = isolate(mapborder())
     )
   })
+
+  # tmapProxy updates only the visual layer (colours, breaks, legend) without
+  # resending the geometry.  Triggers on year, index, palette, style or breaks.
+  observeEvent(
+    c(
+      input$year_sel,
+      input$variable,
+      input$palette,
+      input$style,
+      input$nbreaks
+    ),
+    {
+      req(map_shp())
+
+      fill_col <- get_map_variable(year(), input$variable)
+
+      popup_vars <- paste(
+        c("overall", "education", "income", "health"),
+        year(),
+        sep = "_"
+      )
+      names(popup_vars) <- c(
+        "IFDM",
+        "IFDM - Educação",
+        "IFDM - Emprego & Renda",
+        "IFDM - Saúde"
+      )
+
+      fill_scale <- tm_scale_intervals(
+        style = unname(styles[input$style]),
+        n = input$nbreaks,
+        values = unname(pals[input$palette])
+      )
+
+      lbl <- names(INDEX_CHOICES)[match(input$variable, INDEX_CHOICES)]
+      title <- paste0(city(), " — ", lbl, " (", year(), ")")
+
+      tmapProxy("map", session, {
+        tm_remove_layer(401) +
+          tm_shape(map_shp()) +
+          tm_polygons(
+            fill = fill_col,
+            fill.scale = fill_scale,
+            fill.legend = tm_legend(title = title),
+            fill_alpha = 0.7,
+            col = "gray50",
+            lwd = 0.5,
+            id = "name_muni",
+            popup = tm_popup(vars = popup_vars, format = tm_label_format(digits = 3)),
+            zindex = 401
+          )
+      })
+    },
+    ignoreInit = TRUE
+  )
 
   # Ranking table ----
   ranking_tbl <- reactive({
@@ -440,7 +498,7 @@ server <- function(input, output, session) {
     sel_muni <- d$name_muni[d$is_city]
 
     tbl <- d |>
-      dplyr::transmute(`#` = rank, Município = name_muni, IFDM = hdi)
+      dplyr::transmute(`#` = rank, `Município` = name_muni, IFDM = hdi)
 
     dt <- DT::datatable(
       tbl,
