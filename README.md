@@ -2,16 +2,15 @@
 
 [![Abrir app](https://img.shields.io/badge/Shiny-Abrir%20Dashboard-blue?logo=r)](https://viniciusoike-shiny-firjan-ifdm.share.connect.posit.cloud)
 
-Dashboard interativo que visualiza o desenvolvimento municipal em todos os
-municípios do Brasil, com base no **Índice FIRJAN de Desenvolvimento Municipal
-(IFDM)**. O IFDM mede o desenvolvimento em três eixos — Educação, Saúde e
-Emprego & Renda — a partir de dados públicos oficiais, com leitura análoga ao
-IDH da ONU. Diferentemente do IDH, o IFDM é publicado anualmente.
+Este painel mostra o desenvolvimento dos 5.570 municípios brasileiros pelo
+**Índice FIRJAN de Desenvolvimento Municipal (IFDM)**. O IFDM mede o
+desenvolvimento em três eixos — Educação, Saúde e Emprego & Renda — a partir de
+dados públicos oficiais, com leitura análoga à do IDH da ONU. Diferentemente do
+IDH, o IFDM sai todo ano.
 
-A série cobre os anos de **2013 a 2023** (IFDM 2025, ano-base 2023, metodologia
-revisada). O painel oferece um mapa coroplético interativo, comparação do
-município selecionado com seu estado / região / Brasil, e a evolução de cada
-indicador ao longo do tempo.
+A série cobre 2013 a 2023 (IFDM 2025, ano-base 2023, metodologia revisada). O
+painel traz um mapa coroplético interativo, a comparação do município escolhido
+com seu estado, região ou o Brasil, e a evolução de cada indicador no tempo.
 
 [**→ Abrir o dashboard**](https://viniciusoike-shiny-firjan-ifdm.share.connect.posit.cloud)
 
@@ -19,7 +18,7 @@ indicador ao longo do tempo.
 
 An interactive dashboard for Brazil's FIRJAN Municipal Development Index (IFDM)
 — choropleth map, city-vs-state benchmarks, and annual time series for all
-5 570 Brazilian municipalities. Built with R Shiny. App is in Portuguese.
+5,570 Brazilian municipalities. Built with R Shiny. App is in Portuguese.
 
 ![Dashboard IFDM preview](docs/preview.png)
 
@@ -27,15 +26,13 @@ An interactive dashboard for Brazil's FIRJAN Municipal Development Index (IFDM)
 
 - **Choropleth map** — filter by year (2013–2023) and any of the four IFDM
   dimensions (Overall, Education, Health, Employment & Income).
-- **Autocomplete search** — find any of the 5 570 municipalities, ordered by
-  population.
-- **Benchmarks** — ranking distribution and score comparison against the
+- **Autocomplete search** — find any municipality, ordered by population.
+- **Benchmarks** — ranking, score distribution, and comparison against the
   selected state, region, or national average.
 - **Time series** — annual evolution of each indicator for the selected city.
 - **Data download** — export the full municipal dataset as CSV or XLSX.
-- **About section** — methodology notes, IFDM interpretation scale
-  (High ≥ 0.8 / Moderate 0.6–0.8 / Regular 0.4–0.6 / Low ≤ 0.4), and
-  contact information.
+- **About section** — methodology notes, the IFDM reading scale, and contact
+  information.
 
 ## Built with
 

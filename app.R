@@ -201,12 +201,12 @@ page_dashboard <- tagList(
     col_widths = c(6, 6),
     chart_card(
       "Distribuição do IFDM",
-      "Ranking relativo (região)",
+      "Municípios da comparação, por faixa",
       plotOutput("plot_histogram", height = "320px")
     ),
     chart_card(
       "Ranking",
-      "Ranking relativo (região)",
+      "Posição da cidade em cada eixo",
       plotOutput("plot_ranking", height = "320px")
     )
   ),
@@ -274,7 +274,7 @@ page_download <- tagList(
 )
 
 page_about <- tagList(
-  page_header("Sobre", "Sobre este painel, o IFDM e a EKIO."),
+  page_header("Sobre", "Este painel, o IFDM e o autor."),
   div(
     class = "about-content",
     h3("O painel"),
@@ -292,7 +292,7 @@ page_about <- tagList(
         "Série anual de 2013 a 2023, com metodologia revisada (IFDM 2025, ano-base 2023)."
       ),
       about_card(
-        "Produtor dos Dados",
+        "Produtor dos dados",
         "Firjan (Índice Firjan de Desenvolvimento Municipal). Consultado pela última vez em 05/2026."
       )
     ),
