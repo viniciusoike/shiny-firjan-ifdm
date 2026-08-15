@@ -27,45 +27,43 @@ pals <- c(
 
 text_about <- "O Índice FIRJAN de Desenvolvimento Municipal (IFDM) – é um indicador anual que mensura o desenvolvimento municipal em três eixos: Emprego & renda, Educação e Saúde. O IFDM utiliza várias bases públicas e tem uma metodologia similar a do IDH da ONU."
 text_classification <-
-  "A leitura do IFDM é similar a do IDH:
-   <br>
+  "A leitura do IFDM é similar à do IDH.
    <ul>
-     <li><b>Alto</b>: 0.8 ou maior</li>
-     <li><b>Moderado</b>: maior que 0.6 e menor que 0.8</li>
-     <li><b>Regular</b>: maior que 0.4 e menor que 0.6</li>
-     <li><b>Baixo</b>: 0.4 ou menor</li>
-</ul>  "
+     <li><b>Alto</b>: 0,8 ou mais</li>
+     <li><b>Moderado</b>: de 0,6 a 0,8</li>
+     <li><b>Regular</b>: de 0,4 a 0,6</li>
+     <li><b>Baixo</b>: abaixo de 0,4</li>
+   </ul>"
 
-text_use <- "Para iniciar selecione o município. A lista está ordenada pela
-população do município, mas você pode digitar o nome e usar o autocomplete.
-Os outros campos ajudam a refinar o resultado e alteram tanto o mapa como os
-gráficos abaixo.<br><br>Vale notar que o mapa de Cluster e de Quebras Naturais
-pode levar algum tempo para carregar."
+text_use <- "Comece pelo município. A lista vem ordenada por população, mas
+você pode digitar o nome e usar o autocomplete. Os filtros de índice, ano e
+comparação mudam tanto o mapa como os gráficos abaixo.<br><br>Os mapas de
+Cluster e de Quebras Naturais levam mais tempo para carregar."
 
 text_methods <- "
 <p>
-<b>IFDM</b> Para mais informações sobre o IFDM consulte o <a href='https://www.firjan.com.br/ifdm/' target='_blank'>site</a>.
+<b>IFDM.</b> O <a href='https://www.firjan.com.br/ifdm/' target='_blank'>site da Firjan</a> detalha a metodologia do índice.
 </p>
 <p>
-<b>Tipos de mapa</b>. O método de 'Quebras Naturais' segue o algoritmo de <a href='https://en.wikipedia.org/wiki/Jenks_natural_breaks_optimization' target='_blank'>Jenks</a>, que busca formar grupos homogêneos.
-Já a opção 'Cluster' segue um algotirmo de hierarchical clustering.
+<b>Tipos de mapa.</b> 'Quebras Naturais' segue o algoritmo de <a href='https://en.wikipedia.org/wiki/Jenks_natural_breaks_optimization' target='_blank'>Jenks</a>, que forma grupos homogêneos.
+'Cluster' agrupa os municípios por hierarchical clustering.
 </p>
 "
 
 aboutme_pt_1 <-
-  "Meu nome é Vinícius Oike Reginatto, sou economista, mestre em Economia pela Universidade de São Paulo (USP) e moro em São Paulo desde 2017. Trabalho como consultor em economia e pesquisa, focada em dados. Sou fundador da EKIO, uma consultoria que aplica a inteligência dos dados para transformar projetos e empresas."
+  "Meu nome é Vinícius Oike Reginatto. Sou economista, mestre em Economia pela Universidade de São Paulo (USP), e moro em São Paulo desde 2017. Trabalho como consultor em economia e pesquisa aplicada a dados. Fundei a EKIO, consultoria que usa dados para transformar projetos e empresas."
 
 aboutme_pt_2 <-
   "Acesse os links abaixo para conhecer mais do meu trabalho ou para entrar em contato."
 
 about_app1 <-
-  "Este painel permite analisar o contexto dos municípios brasileiros atráves dos dados do Índice Firjan de Desenvolvimento Municipal (IFDM). O IFDM tem metodologia similar ao popular Índice de Desenvolvimento Humano (IDH) da ONU. O IFDM tem duas vantagens em comparação com o IDH. Primeiro, apesar de analisar as mesmas dimensões do IDH (educação, saúde e renda), o IFDM contempla um maior número de variáveis para compor seu índice. Segundo, o IFDM é calculado anualmente enquanto o IDH é calculado apenas uma vez a cada dez anos."
+  "Este painel analisa os municípios brasileiros com os dados do Índice Firjan de Desenvolvimento Municipal (IFDM). O IFDM segue metodologia parecida com a do Índice de Desenvolvimento Humano (IDH) da ONU e tem duas vantagens sobre ele. Primeiro, cobre as mesmas dimensões (educação, saúde e renda) com um número maior de variáveis. Segundo, sai todo ano, enquanto o IDH municipal sai uma vez a cada dez anos."
 
-about_app2 <- "A interpretação do IFDM é bastante simples: quanto maior, melhor. O mapa interativo
-permite escolher uma cidade e compará-la com a realidade do seu estado.
-Também é possível fazer uma comparação regional ou nacional, alterando o campo
-'Opções', no card do mapa, mas note que isto pode levar algum tempo para carregar.
- Os quatro gráficos que aparecem abaixo do mapa ajudam a contextualizar o IFDM da cidade."
+about_app2 <- "Quanto maior o IFDM, melhor. O mapa mostra a cidade escolhida
+ao lado dos demais municípios do seu estado. O filtro 'Comparação', no topo da
+página, troca esse recorte para região ou Brasil; os recortes maiores levam
+mais tempo para carregar. Os quatro gráficos abaixo do mapa contextualizam o
+IFDM da cidade."
 
 
 # Download page documentation ----

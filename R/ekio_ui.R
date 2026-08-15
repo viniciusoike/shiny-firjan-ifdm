@@ -55,7 +55,8 @@ EKIO_GRID <- unname(.ekio_grays[7]) # #E2E8F0
 # Applies the brand colour palette (positional, so series order must match),
 # muted axes, dashed grey split lines, and the Avenir font stack. Fonts are
 # safe here because echarts renders client-side in the browser.
-e_ekio <- function(e, palette = NULL, y_name = NULL, legend = TRUE) {
+e_ekio <- function(e, palette = NULL, y_name = NULL, legend = TRUE,
+                   y_min = NULL, y_max = NULL) {
   if (!is.null(palette)) {
     e <- echarts4r::e_color(e, unname(palette))
   }
@@ -72,7 +73,9 @@ e_ekio <- function(e, palette = NULL, y_name = NULL, legend = TRUE) {
     ) |>
     echarts4r::e_y_axis(
       name = y_name,
-      scale = TRUE,
+      scale = is.null(y_min) && is.null(y_max),
+      min = y_min,
+      max = y_max,
       nameLocation = "end",
       nameTextStyle = list(color = EKIO_MUTED, align = "left"),
       axisLine = list(show = FALSE),
