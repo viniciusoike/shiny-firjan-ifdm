@@ -313,6 +313,10 @@
   font-size: 13px;
 }
 
+.filter-bar .selectize-dropdown {
+  font-size: 13px;
+}
+
 .filter-bar .btn-sm {
   font-size: 12px;
 }
@@ -397,6 +401,19 @@
   color: var(--ekio-blue-700);
   font-weight: 500;
   white-space: nowrap;
+}
+
+/* Ranking table: selected city ------------------------------------------- */
+
+/* Left rule picks up the orange the map uses for the selected border. */
+table.dataTable tbody tr.ranking-row-city>td {
+  background: var(--ekio-blue-50) !important;
+  font-weight: 700;
+  color: var(--ekio-blue-700);
+}
+
+table.dataTable tbody tr.ranking-row-city>td:first-child {
+  box-shadow: inset 3px 0 0 var(--ekio-orange);
 }
 
 /* Mini table (Resumo por Cidade) ----------------------------------------- */

@@ -42,7 +42,7 @@ plot_series <- function(df) {
     dplyr::group_by(index_type) |>
     echarts4r::e_charts(year) |>
     echarts4r::e_line(hdi, symbolSize = 7) |>
-    e_ekio(palette = cols, y_name = "IFDM") |>
+    e_ekio(palette = cols) |>
     echarts4r::e_tooltip(
       trigger = "axis",
       valueFormatter = .ifdm_value_fmt
@@ -70,7 +70,7 @@ plot_benchmark <- function(df, index_label) {
     dplyr::group_by(name_muni_full) |>
     echarts4r::e_charts(year) |>
     echarts4r::e_line(hdi, symbolSize = 6) |>
-    e_ekio(palette = BENCH_PAL) |>
+    e_ekio(palette = BENCH_PAL, y_min = 0, y_max = 1) |>
     echarts4r::e_tooltip(
       trigger = "axis",
       valueFormatter = .ifdm_value_fmt

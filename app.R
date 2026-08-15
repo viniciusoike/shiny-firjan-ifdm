@@ -132,9 +132,15 @@ page_dashboard <- tagList(
       selectizeInput(
         "city_sel",
         NULL,
-        choices = NULL,
+        choices = city_list,
         selected = "São Paulo (SP)",
-        width = "240px"
+        width = "260px",
+        options = list(
+          placeholder = "Buscar município...",
+          maxOptions = 25,
+          openOnFocus = TRUE,
+          selectOnTab = TRUE
+        )
       )
     ),
     filter_group(
@@ -350,14 +356,8 @@ server <- function(input, output, session) {
   })
 
   # Inputs ----
-  updateSelectizeInput(
-    session,
-    "city_sel",
-    choices = city_list,
-    selected = "São Paulo (SP)",
-    server = TRUE
-  )
-
+  # city_sel is filled client-side (see UI) so the search ignores case and
+  # accents; server-side search matches with grepl(fixed = TRUE).
   city <- reactive(input$city_sel)
   year <- reactive(as.integer(input$year_sel))
   geo <- reactive(input$geo)
@@ -437,38 +437,52 @@ server <- function(input, output, session) {
 
   output$ranking_table <- DT::renderDT({
     d <- ranking_tbl()
-    sel_muni <- d$name_muni[d$is_city]
+    page_len <- 12L
+    sel_pos <- which(d$is_city)[1]
 
     tbl <- d |>
       dplyr::transmute(`#` = rank, Município = name_muni, IFDM = hdi)
 
-    dt <- DT::datatable(
+    # Open on the page holding the selected city and tag its row for CSS.
+    # Matching on rank + name keeps it unique when two states share a name.
+    opts <- list(
+      pageLength = page_len,
+      dom = "ftip",
+      # Keep the data order (already arranged by rank) so displayStart lands
+      # on the right page; header clicks still re-sort.
+      order = list(),
+      columnDefs = list(
+        list(className = "dt-center", targets = c(0, 2))
+      ),
+      language = list(
+        url = "//cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json"
+      )
+    )
+
+    if (!is.na(sel_pos)) {
+      opts$displayStart <- ((sel_pos - 1L) %/% page_len) * page_len
+      cond <- sprintf(
+        "data[1] === %s",
+        jsonlite::toJSON(d$name_muni[sel_pos], auto_unbox = TRUE)
+      )
+      if (!is.na(d$rank[sel_pos])) {
+        cond <- paste0(cond, sprintf(" && data[0] == %d", d$rank[sel_pos]))
+      }
+      opts$rowCallback <- DT::JS(sprintf(
+        "function(row, data) {
+           if (%s) { $(row).addClass('ranking-row-city'); }
+         }",
+        cond
+      ))
+    }
+
+    DT::datatable(
       tbl,
       rownames = FALSE,
       selection = "none",
-      options = list(
-        pageLength = 12,
-        dom = "ftip",
-        columnDefs = list(
-          list(className = "dt-center", targets = c(0, 2))
-        ),
-        language = list(
-          url = "//cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json"
-        )
-      )
+      options = opts
     ) |>
       DT::formatRound("IFDM", digits = 3, mark = ".", dec.mark = ",")
-
-    if (length(sel_muni) == 1) {
-      dt <- DT::formatStyle(
-        dt,
-        "Município",
-        target = "row",
-        fontWeight = DT::styleEqual(sel_muni, "700"),
-        backgroundColor = DT::styleEqual(sel_muni, "#EBF2FA")
-      )
-    }
-    dt
   })
 
   # KPI cards ----
