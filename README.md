@@ -37,7 +37,7 @@ An interactive dashboard for Brazil's FIRJAN Municipal Development Index (IFDM)
 ## Built with
 
 R Shiny and [bslib](https://rstudio.github.io/bslib/), themed with the EKIO
-brand (`_brand.yml` + `styles.css`); interactive maps via
+brand (`_brand.yaml` + `styles.css`); interactive maps via
 [tmap](https://r-tmap.github.io/tmap/) v4 and time series via
 [echarts4r](https://echarts4r.john-coene.com/). Dependencies are pinned with
 [renv](https://rstudio.github.io/renv/).
