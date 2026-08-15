@@ -44,11 +44,13 @@ jobs:
 
       - name: Validate R syntax
         run: |
-          Rscript -e 'parse(file = "app.R")'
-          for (f in list.files("R", pattern = "\\.R$", full.names = TRUE)) {
-            message("Parsing ", f)
-            parse(file = f)
-          }
+          Rscript -e '
+            files <- c("app.R", list.files("R", pattern = "[.]R$", full.names = TRUE))
+            for (f in files) {
+              message("Parsing ", f)
+              invisible(parse(file = f))
+            }
+          '
 
   deploy:
     if: github.ref == 'refs/heads/main'
