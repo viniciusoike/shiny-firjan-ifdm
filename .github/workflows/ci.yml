@@ -21,9 +21,14 @@ jobs:
           r-version: "4.5.1"
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-system-dependencies@v2
-        with:
-          packages: "sf,terra,lwgeom"
+      # System libraries for sf, terra, units and lwgeom. Installed with apt
+      # rather than an action: setup-r-dependencies is pak/DESCRIPTION based and
+      # this project pins with renv instead.
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libgdal-dev libgeos-dev libproj-dev libudunits2-dev libsqlite3-dev
 
       - name: Add R-universe repo for ekioplot
         run: |
@@ -39,11 +44,13 @@ jobs:
 
       - name: Validate R syntax
         run: |
-          Rscript -e 'parse(file = "app.R")'
-          for (f in list.files("R", pattern = "\\.R$", full.names = TRUE)) {
-            message("Parsing ", f)
-            parse(file = f)
-          }
+          Rscript -e '
+            files <- c("app.R", list.files("R", pattern = "[.]R$", full.names = TRUE))
+            for (f in files) {
+              message("Parsing ", f)
+              invisible(parse(file = f))
+            }
+          '
 
   deploy:
     if: github.ref == 'refs/heads/main'
@@ -62,9 +69,14 @@ jobs:
           r-version: "4.5.1"
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-system-dependencies@v2
-        with:
-          packages: "sf,terra,lwgeom"
+      # System libraries for sf, terra, units and lwgeom. Installed with apt
+      # rather than an action: setup-r-dependencies is pak/DESCRIPTION based and
+      # this project pins with renv instead.
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libgdal-dev libgeos-dev libproj-dev libudunits2-dev libsqlite3-dev
 
       - name: Add R-universe repo
         run: |

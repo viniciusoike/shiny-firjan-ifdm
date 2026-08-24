@@ -9,7 +9,7 @@ library(echarts4r)
 # brand.yml is loaded implicitly by bs_theme(brand = TRUE) — referenced here so
 # dependency tools (renv) track it.
 if (!requireNamespace("brand.yml", quietly = TRUE)) {
-  stop("Package 'brand.yml' is required for the EKIO theme (_brand.yml).")
+  stop("Package 'brand.yml' is required for the EKIO theme (_brand.yaml).")
 }
 
 # Supporting R/ scripts (_setup.R, ekio_ui.R, map_hdi.R, plot_*.R, utils.R) are
