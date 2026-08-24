@@ -6,20 +6,22 @@ color:
   palette:
     ekio-blue: "#1E3A5F"
     ekio-blue-dark: "#0D1B2A"
-    ekio-blue-light: "#4A90C2"
-    ekio-teal: "#2C7A7B"
-    ekio-orange: "#DD6B20"
-    ekio-amber: "#D69E2E"
-    ekio-green: "#38A169"
-    ekio-red: "#C53030"
+    ekio-blue-light: "#5597CC"
+    ekio-teal: "#006261"
+    ekio-orange: "#D3742A"
+    ekio-amber: "#D5AA48"
+    ekio-green: "#448255"
+    ekio-red: "#B44D47"
+    ekio-gray: "#6E7378"
+    ekio-stone: "#B4B0AB"
     bluedark: ekio-blue-dark
     blue: ekio-blue
     teal: ekio-teal
     orange: ekio-orange
     green: ekio-green
     red: ekio-red
-  foreground: "#1A202C"
-  background: "#FAFBFC"
+  foreground: "#191A1C"
+  background: "#F5F3F1"
   primary: ekio-blue
   secondary: ekio-teal
   success: ekio-green

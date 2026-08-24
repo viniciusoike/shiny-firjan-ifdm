@@ -39,6 +39,6 @@ plot_histogram <- function(
     theme(
       panel.grid.major.x = element_blank(),
       panel.grid.minor.x = element_blank(),
-      strip.text = element_text(size = 11, face = "bold", color = "#ffffff")
+      strip.text = element_text(size = 11, face = "bold", color = EKIO_SURFACE)
     )
 }

@@ -38,7 +38,7 @@ map_hdi <- function(
   year = 2023,
   variable = "IDH",
   title = variable,
-  pal = "3 (Vermelho-Azul)",
+  pal = "EKIO (Vermelho–Azul)",
   style = "Cluster",
   n = 6,
   geo = "Estado",
@@ -70,7 +70,7 @@ map_hdi <- function(
   fill_scale <- tm_scale_intervals(
     style = unname(styles[style]),
     n = n,
-    values = unname(pals[pal])
+    values = pals[[pal]]
   )
 
   m <- tm_shape(shp) +
@@ -79,10 +79,10 @@ map_hdi <- function(
       fill.scale = fill_scale,
       fill.legend = tm_legend(title = title),
       fill_alpha = 0.7,
-      col = "gray50",
+      col = EKIO_GRID,
       lwd = 0.5,
       id = "name_muni",
-      popup = tm_popup(vars = popup_vars, format = tm_label_format(digits = 3)),
+      popup.vars = popup_vars,
       zindex = 401
     )
 
@@ -90,7 +90,7 @@ map_hdi <- function(
   if (!is.null(border)) {
     m <- m +
       tm_shape(border) +
-      tm_borders(col = "gray30")
+      tm_borders(col = EKIO_INK)
   }
 
   # Highlight the selected city with a branded orange border.
@@ -98,7 +98,7 @@ map_hdi <- function(
   if (nrow(city_shp) > 0) {
     m <- m +
       tm_shape(city_shp) +
-      tm_borders(col = "#DD6B20", lwd = 2.5, zindex = 402)
+      tm_borders(col = EKIO_ORANGE, lwd = 2.5, zindex = 402)
   }
 
   m +
