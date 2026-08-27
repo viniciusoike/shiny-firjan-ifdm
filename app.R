@@ -103,7 +103,7 @@ map_options_popover <- popover(
     "palette",
     "Paleta de cores",
     choices = names(pals),
-    selected = "3 (Vermelho-Azul)"
+    selected = "EKIO (Vermelho–Azul)"
   ),
   selectInput(
     "style",
@@ -456,7 +456,7 @@ server <- function(input, output, session) {
       fill_scale <- tm_scale_intervals(
         style = unname(styles[input$style]),
         n = input$nbreaks,
-        values = unname(pals[input$palette])
+        values = pals[[input$palette]]
       )
 
       lbl <- names(INDEX_CHOICES)[match(input$variable, INDEX_CHOICES)]
@@ -470,10 +470,10 @@ server <- function(input, output, session) {
             fill.scale = fill_scale,
             fill.legend = tm_legend(title = title),
             fill_alpha = 0.7,
-            col = "gray50",
+            col = EKIO_GRID,
             lwd = 0.5,
             id = "name_muni",
-            popup = tm_popup(vars = popup_vars, format = tm_label_format(digits = 3)),
+            popup.vars = popup_vars,
             zindex = 401
           )
       })

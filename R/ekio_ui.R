@@ -7,18 +7,26 @@
 library(ekioplot)
 ## Brand palette (from ekioplot) -------------------------------------------
 
-# ekio_accent: blue, orange, teal, amber, purple, red, green, gray
-.ekio_accent <- ekioplot::ekio_accent
-.ekio_grays <- ekioplot::ekio_gray
-.ekio_blues <- ekioplot::ekio_blue
+.ekio_full <- ekioplot::ekio_pal("full")
+.ekio_blue <- ekioplot::ekio_pal("blue")
+.ekio_gray <- ekioplot::ekio_pal("gray")
+
+EKIO_NAVY <- unname(.ekio_full[1])
+EKIO_BLUE <- unname(.ekio_blue[4])
+EKIO_TEAL <- unname(.ekio_full[3])
+EKIO_ORANGE <- unname(.ekio_full[2])
+EKIO_GOLD <- unname(.ekio_full[4])
+EKIO_GREEN <- unname(.ekio_full[6])
+EKIO_RED <- unname(.ekio_full[5])
+EKIO_SURFACE <- "#FFFFFF"
 
 # Internal index_type key -> hex, drawn from the ekioplot accent palette so the
 # plots match the KPI-card colours defined in styles.css.
 INDEX_HEX <- c(
-  overall = unname(.ekio_blues[1]), # ekio_darkblue  #0D1B2A
-  education = unname(.ekio_accent[3]), # ekio_teal  #2C7A7B
-  health = unname(.ekio_blues[4]), # ekio_blue #1E3A5F
-  income = unname(.ekio_accent[4]) # ekio_amber #D69E2E
+  overall = EKIO_NAVY,
+  education = EKIO_TEAL,
+  health = EKIO_BLUE,
+  income = EKIO_GOLD
 )
 
 # Internal index_type key -> kpi-card colour class (defined in styles.css)
@@ -38,13 +46,13 @@ INDEX_PAL_LABELLED <- c(
   "Educação" = unname(INDEX_HEX["education"])
 )
 
-# City vs. benchmark line (EKIO blue + orange accent)
-BENCH_PAL <- ekioplot::ekio_pal("binary")
+# City vs. benchmark line (EKIO navy + orange accent)
+BENCH_PAL <- c(EKIO_NAVY, EKIO_ORANGE)
 
 # Neutral greys from the ekioplot gray ramp (ink / muted text / grid lines)
-EKIO_INK <- unname(.ekio_grays[1]) # #1A202C
-EKIO_MUTED <- unname(.ekio_grays[4]) # #718096
-EKIO_GRID <- unname(.ekio_grays[7]) # #E2E8F0
+EKIO_INK <- unname(.ekio_gray[1])
+EKIO_MUTED <- unname(.ekio_gray[5])
+EKIO_GRID <- unname(.ekio_gray[2])
 
 # The shared ggplot theme is ekioplot::theme_ekio(), attached above; the plot
 # builders in R/plot_*.R call it directly (no local definition needed).

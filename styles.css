@@ -1,25 +1,34 @@
-/* Design tokens (mockup.html) ---------------------------------------- */
+/* Design tokens (ekioplot) -------------------------------------------- */
 
 :root {
-  --ekio-blue-50: #EEF5FA;
-  --ekio-blue-200: #A8D0E8;
-  --ekio-blue-400: #4A90C2;
-  --ekio-blue-600: #2B4C7E;
+  --ekio-page: #F5F3F1;
+  --ekio-surface: #FFFFFF;
+  --ekio-blue-50: #E8F6FF;
+  --ekio-blue-200: #B1D8F2;
+  --ekio-blue-400: #5597CC;
+  --ekio-blue-600: #305687;
   --ekio-blue-700: #1E3A5F;
   --ekio-blue-900: #0D1B2A;
-  --ekio-gray-100: #F7FAFC;
-  --ekio-gray-200: #EDF2F7;
-  --ekio-gray-300: #E2E8F0;
-  --ekio-gray-400: #CBD5E0;
-  --ekio-gray-500: #A0AEC0;
-  --ekio-gray-600: #718096;
-  --ekio-gray-700: #4A5568;
-  --ekio-gray-800: #2D3748;
-  --ekio-gray-900: #1A202C;
-  --ekio-orange: #DD6B20;
-  --ekio-teal: #2C7A7B;
+  --ekio-gray-100: #F2F3F5;
+  --ekio-gray-200: #CFD2D5;
+  --ekio-gray-300: #AEB1B5;
+  --ekio-gray-400: #8D9197;
+  --ekio-gray-500: #6E7378;
+  --ekio-gray-600: #52555A;
+  --ekio-gray-700: #373A3D;
+  --ekio-gray-800: #28292C;
+  --ekio-gray-900: #191A1C;
+  --ekio-orange: #D3742A;
+  --ekio-teal: #006261;
+  --ekio-gold: #D5AA48;
+  --ekio-green: #448255;
+  --ekio-red: #B44D47;
   --ekio-radius: 8px;
   --ekio-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+body {
+  background: var(--ekio-page);
 }
 
 /* Sidebar ------------------------------------------------------------- */
@@ -38,7 +47,7 @@
   font-size: 22px;
   font-weight: 700;
   letter-spacing: 2px;
-  color: #fff;
+  color: var(--ekio-surface);
   margin: 0;
 }
 
@@ -86,12 +95,12 @@
 
 .ekio-nav-item:hover {
   background: rgba(255, 255, 255, 0.06);
-  color: #fff;
+  color: var(--ekio-surface);
 }
 
 .ekio-nav-item.active {
   background: var(--ekio-blue-700);
-  color: #fff;
+  color: var(--ekio-surface);
 }
 
 .ekio-nav-item:focus-visible {
@@ -163,7 +172,7 @@
 }
 
 .kpi-card {
-  background: #fff;
+  background: var(--ekio-surface);
   border-radius: var(--ekio-radius);
   padding: 16px;
   box-shadow: var(--ekio-shadow-sm);
@@ -194,19 +203,19 @@
 }
 
 .kpi-card.amber::before {
-  background: #D69E2E;
+  background: var(--ekio-gold);
 }
 
 .kpi-card.purple::before {
-  background: #805AD5;
+  background: var(--ekio-gray-400);
 }
 
 .kpi-card.green::before {
-  background: #38A169;
+  background: var(--ekio-green);
 }
 
 .kpi-card.red::before {
-  background: #C53030;
+  background: var(--ekio-red);
 }
 
 .kpi-label {
@@ -238,11 +247,11 @@
 }
 
 .kpi-delta.up {
-  color: #38A169;
+  color: var(--ekio-green);
 }
 
 .kpi-delta.down {
-  color: #C53030;
+  color: var(--ekio-red);
 }
 
 .kpi-delta.neutral {
@@ -280,7 +289,7 @@
   align-items: center;
   margin-bottom: 20px;
   padding: 10px 16px;
-  background: #fff;
+  background: var(--ekio-surface);
   border-radius: var(--ekio-radius);
   border: 1px solid var(--ekio-gray-200);
   box-shadow: var(--ekio-shadow-sm);
@@ -345,7 +354,7 @@
   padding: 5px 12px;
   border-radius: 14px;
   border: 1px solid var(--ekio-gray-300);
-  background: #fff;
+  background: var(--ekio-surface);
   color: var(--ekio-gray-700);
   cursor: pointer;
   transition: all 0.15s;
@@ -361,7 +370,7 @@
 .filter-chips .form-check-input:checked+.form-check-label {
   background: var(--ekio-blue-700);
   border-color: var(--ekio-blue-700);
-  color: #fff;
+  color: var(--ekio-surface);
 }
 
 /* The radio is visually hidden; surface keyboard focus on its chip label. */
@@ -382,7 +391,7 @@
   font-size: 13px;
   font-weight: 600;
   color: var(--ekio-gray-800);
-  background: #fff;
+  background: var(--ekio-surface);
   border-bottom: 1px solid var(--ekio-gray-100);
 }
 
@@ -457,11 +466,11 @@ table.dataTable tbody tr.ranking-row-city>td:first-child {
 }
 
 .mini-table .num.positive {
-  color: #38A169;
+  color: var(--ekio-green);
 }
 
 .mini-table .num.negative {
-  color: #C53030;
+  color: var(--ekio-red);
 }
 
 /* Scrollable table container with a pinned header */
@@ -509,7 +518,7 @@ table.dataTable tbody tr.ranking-row-city>td:first-child {
 }
 
 .about-card {
-  background: #fff;
+  background: var(--ekio-surface);
   border: 1px solid var(--ekio-gray-300);
   border-radius: var(--ekio-radius);
   padding: 16px;

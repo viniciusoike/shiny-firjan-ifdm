@@ -15,14 +15,17 @@ styles <- c(
   "Cluster" = "hclust"
 )
 
-# cols4all palette names (tmap v4). The old Brewer/viridis names still resolve
-# but emit a rename warning; these are the canonical v4 identifiers.
-pals <- c(
+# cols4all palette names (tmap v4), plus the current EKIO diverging palette.
+# Existing Viridis/Brewer choices remain available for users who need them.
+pals <- list(
   "1 (Viridis)" = "viridis",
   "2 (Marrom-Verde)" = "brewer.br_bg",
   "3 (Vermelho-Azul)" = "brewer.rd_bu",
   "4 (Tons de Azul)" = "brewer.blues",
-  "5 (Tons de Verde)" = "brewer.greens"
+  "5 (Tons de Verde)" = "brewer.greens",
+  # tmap maps the first colour to the lowest interval. Reverse EKIO's
+  # blue-red source palette so low values are red and high values are blue.
+  "EKIO (Vermelho–Azul)" = rev(ekioplot::ekio_pal("blue_red"))
 )
 
 text_about <- "O Índice FIRJAN de Desenvolvimento Municipal (IFDM) – é um indicador anual que mensura o desenvolvimento municipal em três eixos: Emprego & renda, Educação e Saúde. O IFDM utiliza várias bases públicas e tem uma metodologia similar a do IDH da ONU."
