@@ -20,21 +20,32 @@ EKIO_GREEN <- unname(.ekio_full[6])
 EKIO_RED <- unname(.ekio_full[5])
 EKIO_SURFACE <- "#FFFFFF"
 
-# Internal index_type key -> hex, drawn from the ekioplot accent palette so the
-# plots match the KPI-card colours defined in styles.css.
+# Shared background for chart cards, ggplot panels and echarts, so the plots
+# blend into their cards.
+EKIO_PLOT_BG <- "#FFFFFF"
+
+# Brand font. The browser loads it from Google Fonts (see _brand.yaml); the
+# ggplot plots render on the server through ragg, so the bundled files in
+# fonts/ are added to the systemfonts database for hosts that lack it.
+EKIO_FONT <- "Host Grotesk"
+EKIO_FONT_STACK <- "'Host Grotesk', 'Helvetica Neue', Arial, sans-serif"
+
+if (!requireNamespace("ragg", quietly = TRUE)) {
+  cli::cli_warn(c(
+    "Package {.pkg ragg} is not installed.",
+    "i" = "Plots will fall back to a default font instead of {EKIO_FONT}."
+  ))
+}
+systemfonts::add_fonts(list.files("fonts", "[.]ttf$", full.names = TRUE))
+options(ekioplot.font_title = EKIO_FONT, ekioplot.font_text = EKIO_FONT)
+
+# Internal index_type key -> hex, drawn from the ekioplot accent palette. Used
+# by both the plots and the KPI-card accents, so the two always match.
 INDEX_HEX <- c(
   overall = EKIO_NAVY,
   education = EKIO_TEAL,
   health = EKIO_BLUE,
   income = EKIO_GOLD
-)
-
-# Internal index_type key -> kpi-card colour class (defined in styles.css)
-INDEX_COLOR_CLASS <- c(
-  overall = "bluedark",
-  education = "teal",
-  health = "blue",
-  income = "amber"
 )
 
 # Same palette keyed by the Portuguese factor labels used in series_data, so
@@ -49,8 +60,9 @@ INDEX_PAL_LABELLED <- c(
 # City vs. benchmark line (EKIO navy + orange accent)
 BENCH_PAL <- c(EKIO_NAVY, EKIO_ORANGE)
 
-# Neutral greys from the ekioplot gray ramp (ink / muted text / grid lines)
-EKIO_INK <- unname(.ekio_gray[1])
+# Neutral greys from the ekioplot gray ramp, which runs light to dark
+# (ink / muted text / grid lines)
+EKIO_INK <- unname(.ekio_gray[length(.ekio_gray)])
 EKIO_MUTED <- unname(.ekio_gray[5])
 EKIO_GRID <- unname(.ekio_gray[2])
 
@@ -61,14 +73,18 @@ EKIO_GRID <- unname(.ekio_gray[2])
 
 # EKIO styling for echarts4r widgets — the echarts counterpart to theme_ekio().
 # Applies the brand colour palette (positional, so series order must match),
-# muted axes, dashed grey split lines, and the Avenir font stack. Fonts are
+# muted axes, dashed grey split lines, and the brand font stack. Fonts are
 # safe here because echarts renders client-side in the browser.
-e_ekio <- function(e, palette = NULL, y_name = NULL, legend = TRUE,
-                   y_min = NULL, y_max = NULL) {
-  if (!is.null(palette)) {
-    e <- echarts4r::e_color(e, unname(palette))
-  }
+e_ekio <- function(
+  e,
+  palette = NULL,
+  y_name = NULL,
+  legend = TRUE,
+  y_min = NULL,
+  y_max = NULL
+) {
   e |>
+    echarts4r::e_color(unname(palette), background = EKIO_PLOT_BG) |>
     echarts4r::e_grid(top = 48, bottom = 36, left = 52, right = 20) |>
     echarts4r::e_x_axis(
       # `scale` fits the axis to the data extent; without it a value axis forces
@@ -99,9 +115,7 @@ e_ekio <- function(e, palette = NULL, y_name = NULL, legend = TRUE,
       top = 6,
       textStyle = list(color = EKIO_INK)
     ) |>
-    echarts4r::e_text_style(
-      fontFamily = "Avenir, 'Helvetica Neue', Arial, sans-serif"
-    )
+    echarts4r::e_text_style(fontFamily = EKIO_FONT_STACK)
 }
 
 ## Layout helpers ----------------------------------------------------------
@@ -215,11 +229,12 @@ kpi_card <- function(
   delta,
   period,
   spark_values,
-  color = "blue",
+  accent = EKIO_NAVY,
   dir = "neutral"
 ) {
   shiny::div(
-    class = paste("kpi-card", color),
+    class = "kpi-card",
+    style = paste0("--kpi-accent:", accent),
     shiny::div(class = "kpi-label", label),
     shiny::div(class = "kpi-value", value),
     shiny::div(

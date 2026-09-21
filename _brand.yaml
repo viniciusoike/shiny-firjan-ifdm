@@ -31,12 +31,13 @@ color:
 
 typography:
   fonts:
-    - family: Avenir
-      source: system
+    - family: Host Grotesk
+      source: google
+      weight: [400, 500, 600, 700]
   base:
-    family: Avenir
+    family: Host Grotesk
     size: 14px
     line-height: 1.5
   headings:
-    family: Avenir
+    family: Host Grotesk
     weight: 700

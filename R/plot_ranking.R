@@ -14,7 +14,9 @@ prep_ranking_table <- function(city, hdi_year, variable, series_geo) {
 
   series_geo |>
     dplyr::filter(index_type == factor_lbl, year == hdi_year) |>
-    dplyr::mutate(rank = as.integer(base::rank(-hdi, na.last = "keep", ties.method = "min"))) |>
+    dplyr::mutate(
+      rank = as.integer(base::rank(-hdi, na.last = "keep", ties.method = "min"))
+    ) |>
     dplyr::arrange(rank) |>
     dplyr::transmute(
       rank,
@@ -73,6 +75,7 @@ plot_ranking <- function(city, year, geo, series_geo) {
       data = df$ranking,
       aes(x = rank, y = index_type, label = paste0(rank, "º")),
       size = 4,
+      family = EKIO_FONT,
       color = EKIO_INK,
       nudge_y = 0.3
     ) +
@@ -84,7 +87,7 @@ plot_ranking <- function(city, year, geo, series_geo) {
       y = NULL,
       subtitle = subtitle
     ) +
-    theme_ekio(base_size = 12) +
+    theme_ekio(base_size = 12, background = EKIO_PLOT_BG) +
     theme(
       panel.grid.major.y = element_blank(),
       panel.grid.major.x = element_line(
