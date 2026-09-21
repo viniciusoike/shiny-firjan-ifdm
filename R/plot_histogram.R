@@ -35,7 +35,7 @@ plot_histogram <- function(
       x = "IFDM",
       y = "Contagem"
     ) +
-    theme_ekio(base_size = 12) +
+    theme_ekio(base_size = 12, background = EKIO_PLOT_BG) +
     theme(
       panel.grid.major.x = element_blank(),
       panel.grid.minor.x = element_blank(),

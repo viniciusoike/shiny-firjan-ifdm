@@ -15,7 +15,14 @@ if (!requireNamespace("brand.yml", quietly = TRUE)) {
 # Supporting R/ scripts (_setup.R, ekio_ui.R, map_hdi.R, plot_*.R, utils.R) are
 # auto-sourced by Shiny before this file runs.
 
+# brand.yml sets a single font family; add fallbacks in case Google Fonts fails.
 theme <- bs_theme(version = 5, brand = TRUE) |>
+  bs_add_variables(
+    "font-family-base" = EKIO_FONT_STACK,
+    "headings-font-family" = EKIO_FONT_STACK,
+    .where = "declarations"
+  ) |>
+  bs_add_rules(sprintf(":root { --ekio-plot-bg: %s; }", EKIO_PLOT_BG)) |>
   bs_add_rules(readLines("styles.css"))
 
 # Choices for the index shown on the map / KPIs. Names are display labels;
@@ -66,7 +73,17 @@ ekio_sidebar <- sidebar(
   div(
     class = "ekio-sidebar-footer",
     div(class = "ekio-updated-label", "Fonte"),
-    div(class = "ekio-updated-date", "IFDM 2025 · Base 2023")
+    div(class = "ekio-updated-date", "IFDM 2025 · Base 2023"),
+    tags$a(
+      href = "https://ekio.io",
+      target = "_blank",
+      rel = "noopener",
+      tags$img(
+        class = "ekio-badge",
+        src = "img/ekio-badge-developed-by.svg",
+        alt = "Desenvolvido por EKIO"
+      )
+    )
   )
 )
 
@@ -566,7 +583,7 @@ server <- function(input, output, session) {
         delta = ifdm_delta_lbl(delta),
         period = label_y,
         spark_values = s$hdi,
-        color = INDEX_COLOR_CLASS[[ix$key]],
+        accent = INDEX_HEX[[ix$key]],
         dir = pp_dir(delta)
       )
     })

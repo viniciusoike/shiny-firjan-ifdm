@@ -1,3 +1,25 @@
+# Carto basemaps now require an API key. leaflet's provider template drops the
+# `key` parameter (rstudio/leaflet#965), so pass a raw URL template instead;
+# tmap hands any "http..." server to leaflet::addTiles() as-is. Without the
+# key the provider still works but Carto overlays an "API KEY REQUIRED" mark.
+carto_basemap <- function(key = Sys.getenv("CARTO_BASEMAP_SHINY")) {
+  if (!nzchar(key)) {
+    cli::cli_warn(c(
+      "{.envvar CARTO_BASEMAP_SHINY} is not set.",
+      "i" = "The Carto basemap will show an {.val API KEY REQUIRED} watermark."
+    ))
+    return("CartoDB.Positron")
+  }
+  url <- paste0(
+    "https://basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png",
+    "?key=",
+    utils::URLencode(key, reserved = TRUE)
+  )
+  return(url)
+}
+
+CARTO_BASEMAP <- carto_basemap()
+
 prep_mapdata <- function(ctx, geo = "Estado") {
   if (geo == "Estado") {
     shp <- dplyr::filter(firjan_full, code_state %in% ctx$code_state)
@@ -102,6 +124,10 @@ map_hdi <- function(
   }
 
   m +
-    tm_basemap(server = "CartoDB.Positron") +
+    tm_basemap(server = CARTO_BASEMAP) +
+    tm_credits(
+      "© CARTO © OpenStreetMap contributors",
+      position = c("right", "bottom")
+    ) +
     tm_view(set_view = c(coords_city, 10))
 }

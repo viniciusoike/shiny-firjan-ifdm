@@ -139,6 +139,13 @@ body {
   color: var(--ekio-gray-300);
 }
 
+.ekio-badge {
+  display: block;
+  width: 120px;
+  height: auto;
+  margin-top: 16px;
+}
+
 /* Page chrome ---------------------------------------------------------- */
 
 .ekio-pages {
@@ -188,41 +195,13 @@ body {
   left: 0;
   right: 0;
   height: 3px;
-}
-
-.kpi-card.blue::before {
-  background: var(--ekio-blue-700);
-}
-
-.kpi-card.teal::before {
-  background: var(--ekio-teal);
-}
-
-.kpi-card.orange::before {
-  background: var(--ekio-orange);
-}
-
-.kpi-card.amber::before {
-  background: var(--ekio-gold);
-}
-
-.kpi-card.purple::before {
-  background: var(--ekio-gray-400);
-}
-
-.kpi-card.green::before {
-  background: var(--ekio-green);
-}
-
-.kpi-card.red::before {
-  background: var(--ekio-red);
+  /* Set per card from INDEX_HEX so the accent matches the plots. */
+  background: var(--kpi-accent, transparent);
 }
 
 .kpi-label {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
   color: var(--ekio-gray-600);
   margin-bottom: 6px;
 }
@@ -303,10 +282,8 @@ body {
 }
 
 .filter-group>label {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
   color: var(--ekio-gray-600);
   margin: 0;
 }
@@ -381,7 +358,9 @@ body {
 
 /* Cards ----------------------------------------------------------------- */
 
+/* --ekio-plot-bg is set from EKIO_PLOT_BG in app.R so plots blend in. */
 .card {
+  --bs-card-bg: var(--ekio-plot-bg, var(--ekio-surface));
   border: 1px solid var(--ekio-gray-200);
   border-radius: var(--ekio-radius);
   box-shadow: var(--ekio-shadow-sm);
@@ -391,7 +370,7 @@ body {
   font-size: 13px;
   font-weight: 600;
   color: var(--ekio-gray-800);
-  background: var(--ekio-surface);
+  background: var(--bs-card-bg);
   border-bottom: 1px solid var(--ekio-gray-100);
 }
 
