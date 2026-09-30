@@ -1,0 +1,15 @@
+[    2881ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ https://basemaps.cartocdn.com/rastertiles/light_all/10/379/581.png?key=cb1_3gkp_3_af249e1e48e1f036152a4c72:0
+[    2881ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ https://basemaps.cartocdn.com/rastertiles/light_all/10/380/581.png?key=cb1_3gkp_3_af249e1e48e1f036152a4c72:0
+[    2881ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ https://basemaps.cartocdn.com/rastertiles/light_all/10/378/581.png?key=cb1_3gkp_3_af249e1e48e1f036152a4c72:0
+[    2881ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ https://basemaps.cartocdn.com/rastertiles/light_all/10/377/581.png?key=cb1_3gkp_3_af249e1e48e1f036152a4c72:0
+[    2881ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ https://basemaps.cartocdn.com/rastertiles/light_all/10/377/580.png?key=cb1_3gkp_3_af249e1e48e1f036152a4c72:0
+[    2881ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ https://basemaps.cartocdn.com/rastertiles/light_all/10/380/580.png?key=cb1_3gkp_3_af249e1e48e1f036152a4c72:0
+[    2881ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ https://basemaps.cartocdn.com/rastertiles/light_all/10/377/582.png?key=cb1_3gkp_3_af249e1e48e1f036152a4c72:0
+[    2881ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ https://basemaps.cartocdn.com/rastertiles/light_all/10/380/582.png?key=cb1_3gkp_3_af249e1e48e1f036152a4c72:0
+[    2882ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ https://basemaps.cartocdn.com/rastertiles/light_all/10/378/580.png?key=cb1_3gkp_3_af249e1e48e1f036152a4c72:0
+[    2882ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ https://basemaps.cartocdn.com/rastertiles/light_all/10/379/580.png?key=cb1_3gkp_3_af249e1e48e1f036152a4c72:0
+[    2882ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ https://basemaps.cartocdn.com/rastertiles/light_all/10/378/582.png?key=cb1_3gkp_3_af249e1e48e1f036152a4c72:0
+[    2882ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ https://basemaps.cartocdn.com/rastertiles/light_all/10/379/582.png?key=cb1_3gkp_3_af249e1e48e1f036152a4c72:0
+[    2886ms] [ERROR] Access to XMLHttpRequest at 'http://cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json' from origin 'http://localhost:8765' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:8765/:0
+[    2887ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json:0
+[   32125ms] [ERROR] WebSocket connection to 'ws://localhost:8765/websocket/' failed:  @ http://localhost:8765/shiny-javascript-1.11.1/shiny.min.js:445

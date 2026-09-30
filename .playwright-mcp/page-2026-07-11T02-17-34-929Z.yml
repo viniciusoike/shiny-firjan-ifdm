@@ -1,0 +1,206 @@
+- generic [active] [ref=f1e1]:
+  - generic [ref=f1e2]:
+    - banner [ref=f1e3]:
+      - generic [ref=f1e4]: Dashboard IFDM - Vinicius Oike
+      - navigation [ref=f1e5]:
+        - text: 
+        - button " Toggle navigation" [ref=f1e6] [cursor=pointer]:
+          - text: 
+          - generic [ref=f1e7]: Toggle navigation
+        - generic:
+          - list
+    - complementary [ref=f1e8]:
+      - list [ref=f1e10]:
+        - listitem [ref=f1e11]:
+          - link "gauge icon Dashboard" [expanded] [ref=f1e12] [cursor=pointer]:
+            - /url: "#shiny-tab-dashboard"
+            - generic "gauge icon" [ref=f1e13]: 
+            - text: Dashboard
+        - generic [ref=f1e14]:
+          - generic [ref=f1e15]: Escolha Cidade
+          - generic [ref=f1e18] [cursor=pointer]:
+            - generic [ref=f1e118]: São Paulo (SP)
+            - combobox "Escolha Cidade" [ref=f1e19]
+        - generic [ref=f1e20]:
+          - generic [ref=f1e21]: Índice para visualizar
+          - generic [ref=f1e24] [cursor=pointer]:
+            - generic [ref=f1e25]: IDH
+            - combobox "Índice para visualizar" [ref=f1e26]
+        - generic [ref=f1e27]:
+          - generic [ref=f1e28]: Ano
+          - generic [ref=f1e31] [cursor=pointer]:
+            - generic [ref=f1e32]: "2010"
+            - combobox "Ano" [ref=f1e33]
+        - generic [ref=f1e34]:
+          - generic [ref=f1e35]: Paleta de cores
+          - generic [ref=f1e38] [cursor=pointer]:
+            - generic [ref=f1e39]: 3 (Vermelho-Azul)
+            - combobox "Paleta de cores" [ref=f1e40]
+        - generic [ref=f1e41]:
+          - generic [ref=f1e42]: Tipo de mapa
+          - generic [ref=f1e45] [cursor=pointer]:
+            - generic [ref=f1e46]: Cluster
+            - combobox "Tipo de mapa" [ref=f1e47]
+        - generic [ref=f1e48]:
+          - generic [ref=f1e49]: Número de grupos (Não se aplica ao Básico)
+          - spinbutton "Número de grupos (Não se aplica ao Básico)" [ref=f1e50]: "6"
+        - generic [ref=f1e51]:
+          - generic [ref=f1e52]: Comparação Geográfica
+          - generic [ref=f1e55] [cursor=pointer]:
+            - generic [ref=f1e56]: Estado
+            - combobox "Comparação Geográfica" [ref=f1e57]
+        - listitem [ref=f1e58]:
+          - link "file-arrow-down icon Baixar dados" [ref=f1e59] [cursor=pointer]:
+            - /url: "#shiny-tab-download_data"
+            - generic "file-arrow-down icon" [ref=f1e60]: 
+            - text: Baixar dados
+        - listitem [ref=f1e61]:
+          - link "circle-info icon Sobre mim" [ref=f1e62] [cursor=pointer]:
+            - /url: "#shiny-tab-about_me"
+            - generic "circle-info icon" [ref=f1e63]: 
+            - text: Sobre mim
+    - generic [ref=f1e66]:
+      - tabpanel [ref=f1e67]:
+        - heading "Índice de Desenvolvimento Humano (Firjan)" [level=2] [ref=f1e70]
+        - generic [ref=f1e71]:
+          - generic [ref=f1e119]:
+            - generic:
+              - generic:
+                - generic [ref=f1e190]:
+                  - button "Zoom in" [ref=f1e191] [cursor=pointer]: +
+                  - button "Zoom out" [ref=f1e192] [cursor=pointer]: −
+                - link "Layers" [ref=f1e194] [cursor=pointer]:
+                  - /url: "#"
+              - generic [ref=f1e195]:
+                - strong [ref=f1e197]: São Paulo (SP)
+                - text: 0.606 to 0.668 0.668 to 0.710 0.710 to 0.763 0.763 to 0.834 0.834 to 0.873 0.873 to 0.930 Missing
+              - generic [ref=f1e205]:
+                - link "Leaflet" [ref=f1e206] [cursor=pointer]:
+                  - /url: https://leafletjs.com
+                - text: "| ©"
+                - link "OpenStreetMap" [ref=f1e207] [cursor=pointer]:
+                  - /url: https://www.openstreetmap.org/copyright
+                - text: contributors ©
+                - link "CARTO" [ref=f1e208] [cursor=pointer]:
+                  - /url: https://carto.com/attributions
+          - generic [ref=f1e78]:
+            - generic [ref=f1e210]:
+              - generic "compass icon" [ref=f1e212]: 
+              - generic [ref=f1e213]:
+                - generic [ref=f1e214]: IFDM (Geral)
+                - generic [ref=f1e215]: 0.864 (Alto)
+            - generic [ref=f1e217]:
+              - generic "graduation-cap icon" [ref=f1e219]: 
+              - generic [ref=f1e220]:
+                - generic [ref=f1e221]: Educação
+                - generic [ref=f1e222]: 0.892 (Alto)
+            - generic [ref=f1e224]:
+              - generic "money-bill-1 icon" [ref=f1e226]: 
+              - generic [ref=f1e227]:
+                - generic [ref=f1e228]: Renda
+                - generic [ref=f1e229]: 0.797 (Moderado)
+            - generic [ref=f1e231]:
+              - generic "briefcase-medical icon" [ref=f1e233]: 
+              - generic [ref=f1e234]:
+                - generic [ref=f1e235]: Saúde
+                - generic [ref=f1e236]: 0.902 (Alto)
+            - generic [ref=f1e80]:
+              - tablist [ref=f1e81]:
+                - tab "Sobre" [expanded] [selected] [ref=f1e82]
+                - tab "Classificação" [expanded] [selected] [ref=f1e83] [cursor=pointer]
+                - tab "Como usar" [expanded] [selected] [ref=f1e84] [cursor=pointer]
+                - tab "Metodologia" [expanded] [selected] [ref=f1e85] [cursor=pointer]
+              - tabpanel "Sobre" [ref=f1e87]: "O Índice FIRJAN de Desenvolvimento Municipal (IFDM) – é um indicador anual que mensura o desenvolvimento municipal em três eixos: Emprego & renda, Educação e Saúde. O IFDM utiliza várias bases públicas e tem uma metodologia similar a do IDH da ONU."
+        - generic [ref=f1e88]:
+          - generic [ref=f1e91]:
+            - button "minus icon" [ref=f1e94] [cursor=pointer]:
+              - generic "minus icon" [ref=f1e95]: 
+            - img "Plot object" [ref=f1e237]
+          - generic [ref=f1e100]:
+            - button "minus icon" [ref=f1e103] [cursor=pointer]:
+              - generic "minus icon" [ref=f1e104]: 
+            - img "Plot object" [ref=f1e238]
+        - generic [ref=f1e107]:
+          - generic [ref=f1e240]:
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: "0.5"
+                    - generic: "0.6"
+                    - generic: "0.7"
+                    - generic: "0.8"
+                    - generic: "0.9"
+                - generic:
+                  - generic:
+                    - generic: "2007"
+                    - generic: "2010"
+                    - generic: "2013"
+                    - generic: "2016"
+                  - generic:
+                    - generic: "0.5"
+                    - generic: "0.6"
+                    - generic: "0.7"
+                    - generic: "0.8"
+                    - generic: "0.9"
+                - generic:
+                  - generic:
+                    - generic: "2007"
+                    - generic: "2010"
+                    - generic: "2013"
+                    - generic: "2016"
+            - img:
+              - generic:
+                - generic: Benchmark
+                - generic: IDH (Firjan)
+                - generic: Geral (IFDM)
+                - generic: Saúde
+                - generic: Renda
+                - generic: Educação
+            - link "plotly-logomark" [ref=f1e317] [cursor=pointer]:
+              - /url: https://plotly.com/
+              - img "plotly-logomark" [ref=f1e318]
+          - generic [ref=f1e332]:
+            - img:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: "2005"
+                    - generic: "2006"
+                    - generic: "2007"
+                    - generic: "2008"
+                    - generic: "2009"
+                    - generic: "2010"
+                    - generic: "2011"
+                    - generic: "2012"
+                    - generic: "2013"
+                    - generic: "2014"
+                    - generic: "2015"
+                    - generic: "2016"
+                  - generic:
+                    - generic: "0.65"
+                    - generic: "0.70"
+                    - generic: "0.75"
+                    - generic: "0.80"
+                    - generic: "0.85"
+                    - generic: "0.90"
+                    - generic: "0.95"
+            - img:
+              - generic:
+                - generic [ref=f1e348]:
+                  - generic [ref=f1e349]: Geral (IFDM)
+                  - generic [ref=f1e357]: Saúde
+                  - generic [ref=f1e365]: Renda
+                  - generic [ref=f1e373]: Educação
+                - generic: Indicadores
+                - generic: IDH (Firjan)
+            - link "plotly-logomark" [ref=f1e420] [cursor=pointer]:
+              - /url: https://plotly.com/
+              - img "plotly-logomark" [ref=f1e421]
+      - text:     
+  - log [ref=f1e112]
+  - log [ref=f1e113]
+  - log [ref=f1e114]
+  - log [ref=f1e115]
+  - log [ref=f1e116]
+  - log [ref=f1e117]

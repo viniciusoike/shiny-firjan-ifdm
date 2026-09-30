@@ -1,0 +1,6 @@
+- generic [active] [ref=e1]:
+  - banner
+  - generic [ref=e6]:
+    - heading "Please Wait" [level=3] [ref=e7]
+    - img "loading" [ref=e8]
+  - contentinfo

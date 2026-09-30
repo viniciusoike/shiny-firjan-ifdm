@@ -1,0 +1,109 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - main [ref=e4]:
+      - generic [ref=e7]:
+        - tabpanel [ref=e8]:
+          - generic [ref=e9]:
+            - heading "Índice FIRJAN de Desenvolvimento Municipal" [level=2] [ref=e10]
+            - paragraph [ref=e11]: Mapa interativo e séries do IFDM para os municípios brasileiros (2013–2023).
+          - generic [ref=e12]:
+            - generic [ref=e13]:
+              - generic [ref=e14]: Cidade
+              - generic [ref=e18] [cursor=pointer]:
+                - generic [ref=e19]: São Paulo (SP)
+                - combobox [ref=e20]
+            - generic [ref=e21]:
+              - generic [ref=e22]: Índice
+              - radiogroup [ref=e23]:
+                - generic [ref=e24]:
+                  - generic [ref=e25] [cursor=pointer]:
+                    - radio "Geral" [checked] [ref=e26]
+                    - text: Geral
+                  - generic [ref=e27] [cursor=pointer]:
+                    - radio "Educação" [ref=e28]
+                    - text: Educação
+                  - generic [ref=e29] [cursor=pointer]:
+                    - radio "Saúde" [ref=e30]
+                    - text: Saúde
+                  - generic [ref=e31] [cursor=pointer]:
+                    - radio "Emprego & Renda" [ref=e32]
+                    - text: Emprego & Renda
+            - generic [ref=e33]:
+              - generic [ref=e34]: Ano
+              - generic [ref=e38] [cursor=pointer]:
+                - generic [ref=e39]: "2023"
+                - combobox [ref=e40]
+            - generic [ref=e41]:
+              - generic [ref=e42]: Comparação
+              - generic [ref=e46] [cursor=pointer]:
+                - generic [ref=e47]: Estado
+                - combobox [ref=e48]
+          - generic [ref=e49]:
+            - generic [ref=e51]:
+              - button "Opções do mapa" [ref=e54] [cursor=pointer]: ⚙ Opções
+              - generic [ref=e55]: Loading...
+              - button "Expand card" [ref=e60] [cursor=pointer]
+            - generic [ref=e64]:
+              - generic [ref=e65]: ranking
+              - button "Expand card" [ref=e70] [cursor=pointer]
+          - generic [ref=e73]:
+            - generic [ref=e75]:
+              - generic [ref=e76]:
+                - generic [ref=e77]: Distribuição do IFDM
+                - generic [ref=e78]: Municípios da comparação, por faixa
+              - button "Expand card" [ref=e82] [cursor=pointer]
+            - generic [ref=e86]:
+              - generic [ref=e87]:
+                - generic [ref=e88]: Ranking
+                - generic [ref=e89]: Posição da cidade em cada eixo
+              - button "Expand card" [ref=e93] [cursor=pointer]
+          - generic [ref=e96]:
+            - generic [ref=e98]:
+              - generic [ref=e99]:
+                - generic [ref=e100]: Evolução dos indicadores
+                - generic [ref=e101]: Série Histórica
+              - button "Expand card" [ref=e105] [cursor=pointer]
+            - generic [ref=e109]:
+              - generic [ref=e110]:
+                - generic [ref=e111]: Benchmark
+                - generic [ref=e112]: Cidade × Brasil (média)
+              - generic [ref=e114]:
+                - tablist [ref=e115]:
+                  - tab "Geral" [selected] [ref=e116] [cursor=pointer]
+                  - tab "Saúde" [ref=e117] [cursor=pointer]
+                  - tab "Emprego & Renda" [ref=e118] [cursor=pointer]
+                  - tab "Educação" [ref=e119] [cursor=pointer]
+                - tabpanel [ref=e121]
+              - button "Expand card" [ref=e124] [cursor=pointer]
+        - text:  
+    - complementary [ref=e127]:
+      - generic [ref=e128]:
+        - generic [ref=e129]:
+          - heading "EKIO" [level=1] [ref=e130]
+          - paragraph [ref=e131]: Desenvolvimento Municipal
+        - navigation [ref=e132]:
+          - generic [ref=e133]:
+            - generic [ref=e134]: Painel
+            - link "Dashboard" [ref=e135] [cursor=pointer]:
+              - generic [aria-hidden] [ref=e136]: ◉
+          - generic [ref=e138]:
+            - generic [ref=e139]: Dados
+            - link "Baixar dados" [ref=e140] [cursor=pointer]:
+              - generic [aria-hidden] [ref=e141]: ⤓
+          - link "Sobre" [ref=e144] [cursor=pointer]:
+            - generic [aria-hidden] [ref=e145]: ⓘ
+        - generic [ref=e147]:
+          - generic [ref=e148]: Fonte
+          - generic [ref=e149]: IFDM 2025 · Base 2023
+          - link [ref=e150] [cursor=pointer]:
+            - /url: https://ekio.io
+            - img "Desenvolvido por EKIO" [ref=e151]
+    - button "Toggle sidebar" [expanded] [ref=e152] [cursor=pointer]
+    - separator "Resize sidebar":
+      - generic: Use arrow keys to resize the sidebar, Shift for larger steps, Home/End for min/max width.
+  - generic [ref=e155]: Buscar município...
+  - log [ref=e156]
+  - log [ref=e157]
+  - log [ref=e158]
+  - log [ref=e159]
+  - log [ref=e160]

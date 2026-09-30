@@ -1,0 +1,247 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - main [ref=e4]:
+      - generic [ref=e7]:
+        - tabpanel [ref=e8]:
+          - generic [ref=e9]:
+            - heading "Índice FIRJAN de Desenvolvimento Municipal" [level=2] [ref=e10]
+            - paragraph [ref=e11]: Mapa interativo e séries do IFDM para os municípios brasileiros (2013–2023).
+          - generic [ref=e12]:
+            - generic [ref=e13]:
+              - generic [ref=e14]: Cidade
+              - generic [ref=e18] [cursor=pointer]:
+                - generic [ref=e157]: São Paulo (SP)
+                - combobox [ref=e19]
+            - generic [ref=e20]:
+              - generic [ref=e21]: Índice
+              - radiogroup [ref=e22]:
+                - generic [ref=e23]:
+                  - generic [ref=e24] [cursor=pointer]:
+                    - radio "Geral" [checked] [ref=e25]
+                    - text: Geral
+                  - generic [ref=e26] [cursor=pointer]:
+                    - radio "Educação" [ref=e27]
+                    - text: Educação
+                  - generic [ref=e28] [cursor=pointer]:
+                    - radio "Saúde" [ref=e29]
+                    - text: Saúde
+                  - generic [ref=e30] [cursor=pointer]:
+                    - radio "Emprego & Renda" [ref=e31]
+                    - text: Emprego & Renda
+            - generic [ref=e32]:
+              - generic [ref=e33]: Ano
+              - generic [ref=e37] [cursor=pointer]:
+                - generic [ref=e38]: "2023"
+                - combobox [ref=e39]
+            - generic [ref=e40]:
+              - generic [ref=e41]: Comparação
+              - generic [ref=e45] [cursor=pointer]:
+                - generic [ref=e46]: Estado
+                - combobox [ref=e47]
+          - generic [ref=e159]:
+            - generic [ref=e160]:
+              - generic [ref=e161]: IFDM Geral
+              - generic [ref=e162]: 0,827
+              - generic [ref=e163]:
+                - generic [ref=e164]: +0,020
+                - generic [ref=e165]: · vs 2022
+            - generic [ref=e178]:
+              - generic [ref=e179]: Educação
+              - generic [ref=e180]: 0,759
+              - generic [ref=e181]:
+                - generic [ref=e182]: +0,017
+                - generic [ref=e183]: · vs 2022
+            - generic [ref=e196]:
+              - generic [ref=e197]: Saúde
+              - generic [ref=e198]: 0,771
+              - generic [ref=e199]:
+                - generic [ref=e200]: +0,046
+                - generic [ref=e201]: · vs 2022
+            - generic [ref=e214]:
+              - generic [ref=e215]: Emprego & Renda
+              - generic [ref=e216]: 0,951
+              - generic [ref=e217]:
+                - generic [ref=e218]: "-0,004"
+                - generic [ref=e219]: · vs 2022
+          - generic [ref=e48]:
+            - generic [ref=e50]:
+              - generic [ref=e51]:
+                - generic [ref=e232]: São Paulo (SP) — Geral (2023)
+                - button "Opções do mapa" [ref=e53] [cursor=pointer]: ⚙ Opções
+              - generic [ref=e233]:
+                - generic:
+                  - generic:
+                    - generic [ref=e298]:
+                      - button "Zoom in" [ref=e299] [cursor=pointer]: +
+                      - button "Zoom out" [ref=e300] [cursor=pointer]: −
+                    - link "Layers" [ref=e302] [cursor=pointer]:
+                      - /url: "#"
+                  - generic:
+                    - generic [ref=e303]:
+                      - generic [ref=e304]: São Paulo (SP)
+                      - generic [ref=e306]: 0.536 - 0.573
+                      - generic [ref=e308]: 0.574 - 0.629
+                      - generic [ref=e310]: 0.630 - 0.682
+                      - generic [ref=e312]: 0.683 - 0.757
+                      - generic [ref=e314]: 0.758 - 0.827
+                      - generic [ref=e316]: 0.828 - 0.893
+                    - generic [ref=e318]:
+                      - link "Leaflet" [ref=e319] [cursor=pointer]:
+                        - /url: https://leafletjs.com
+                      - text: "| ©"
+                      - link "OpenStreetMap" [ref=e320] [cursor=pointer]:
+                        - /url: https://www.openstreetmap.org/copyright
+                      - text: contributors ©
+                      - link "CARTO" [ref=e321] [cursor=pointer]:
+                        - /url: https://carto.com/attributions
+              - button "Expand card" [ref=e59] [cursor=pointer]
+            - generic [ref=e63]:
+              - generic [ref=e64]:
+                - generic [ref=e322]: Ranking — Geral · Estado (2023)
+                - generic [ref=e65]: ranking
+              - generic [ref=e323]:
+                - generic [ref=e325]:
+                  - text: Pesquisar
+                  - searchbox "Pesquisar" [ref=e326]
+                - table [ref=e327]:
+                  - rowgroup [ref=e328]:
+                    - row [ref=e329]:
+                      - 'columnheader "#: Ordenar colunas de forma ascendente" [ref=e330] [cursor=pointer]': "#"
+                      - 'columnheader "Município: Ordenar colunas de forma ascendente" [ref=e331] [cursor=pointer]': Município
+                      - 'columnheader "IFDM: Ordenar colunas de forma ascendente" [ref=e332] [cursor=pointer]': IFDM
+                  - rowgroup [ref=e333]:
+                    - row [ref=e334]:
+                      - cell "1" [ref=e335]
+                      - cell "Águas de São Pedro (SP)" [ref=e336]
+                      - cell "0,893" [ref=e337]
+                    - row [ref=e338]:
+                      - cell "2" [ref=e339]
+                      - cell "São Caetano do Sul (SP)" [ref=e340]
+                      - cell "0,888" [ref=e341]
+                    - row [ref=e342]:
+                      - cell "3" [ref=e343]
+                      - cell "Americana (SP)" [ref=e344]
+                      - cell "0,881" [ref=e345]
+                    - row [ref=e346]:
+                      - cell "4" [ref=e347]
+                      - cell "São José do Rio Preto (SP)" [ref=e348]
+                      - cell "0,875" [ref=e349]
+                    - row [ref=e350]:
+                      - cell "5" [ref=e351]
+                      - cell "Indaiatuba (SP)" [ref=e352]
+                      - cell "0,872" [ref=e353]
+                    - row [ref=e354]:
+                      - cell "6" [ref=e355]
+                      - cell "São Carlos (SP)" [ref=e356]
+                      - cell "0,868" [ref=e357]
+                    - row [ref=e358]:
+                      - cell "7" [ref=e359]
+                      - cell "Jundiaí (SP)" [ref=e360]
+                      - cell "0,864" [ref=e361]
+                    - row [ref=e362]:
+                      - cell "8" [ref=e363]
+                      - cell "Bebedouro (SP)" [ref=e364]
+                      - cell "0,863" [ref=e365]
+                    - row [ref=e366]:
+                      - cell "9" [ref=e367]
+                      - cell "Botucatu (SP)" [ref=e368]
+                      - cell "0,862" [ref=e369]
+                    - row [ref=e370]:
+                      - cell "10" [ref=e371]
+                      - cell "São João da Boa Vista (SP)" [ref=e372]
+                      - cell "0,860" [ref=e373]
+                    - row [ref=e374]:
+                      - cell "11" [ref=e375]
+                      - cell "Bragança Paulista (SP)" [ref=e376]
+                      - cell "0,858" [ref=e377]
+                    - row [ref=e378]:
+                      - cell "12" [ref=e379]
+                      - cell "São Bernardo do Campo (SP)" [ref=e380]
+                      - cell "0,858" [ref=e381]
+                - status [ref=e382]: Mostrando de 1 até 12 de 645 registros
+                - list [ref=e384]:
+                  - listitem [ref=e385]:
+                    - link "Anterior" [disabled]
+                  - listitem [ref=e386]:
+                    - link "1" [ref=e387] [cursor=pointer]:
+                      - /url: "#"
+                  - listitem [ref=e388]:
+                    - link "2" [ref=e389] [cursor=pointer]:
+                      - /url: "#"
+                  - listitem [ref=e390]:
+                    - link "3" [ref=e391] [cursor=pointer]:
+                      - /url: "#"
+                  - listitem [ref=e392]:
+                    - link "4" [ref=e393] [cursor=pointer]:
+                      - /url: "#"
+                  - listitem [ref=e394]:
+                    - link "5" [ref=e395] [cursor=pointer]:
+                      - /url: "#"
+                  - listitem [ref=e396]:
+                    - link "…" [disabled]
+                  - listitem [ref=e397]:
+                    - link "54" [ref=e398] [cursor=pointer]:
+                      - /url: "#"
+                  - listitem [ref=e399]:
+                    - link "Próximo" [ref=e400] [cursor=pointer]:
+                      - /url: "#"
+              - button "Expand card" [ref=e69] [cursor=pointer]
+          - generic [ref=e72]:
+            - generic [ref=e74]:
+              - generic [ref=e75]:
+                - generic [ref=e76]: Distribuição do IFDM
+                - generic [ref=e77]: Ranking relativo (região)
+              - img "Plot object" [ref=e401]
+              - button "Expand card" [ref=e81] [cursor=pointer]
+            - generic [ref=e85]:
+              - generic [ref=e86]:
+                - generic [ref=e87]: Ranking
+                - generic [ref=e88]: Ranking relativo (região)
+              - img "Plot object" [ref=e402]
+              - button "Expand card" [ref=e92] [cursor=pointer]
+          - generic [ref=e95]:
+            - generic [ref=e97]:
+              - generic [ref=e98]:
+                - generic [ref=e99]: Evolução dos indicadores
+                - generic [ref=e100]: Série Histórica
+              - button "Expand card" [ref=e104] [cursor=pointer]
+            - generic [ref=e108]:
+              - generic [ref=e109]:
+                - generic [ref=e110]: Benchmark
+                - generic [ref=e111]: Cidade × Brasil (média)
+              - generic [ref=e113]:
+                - tablist [ref=e114]:
+                  - tab "Geral" [selected] [ref=e115] [cursor=pointer]
+                  - tab "Saúde" [ref=e116] [cursor=pointer]
+                  - tab "Emprego & Renda" [ref=e117] [cursor=pointer]
+                  - tab "Educação" [ref=e118] [cursor=pointer]
+                - tabpanel [ref=e120]
+              - button "Expand card" [ref=e123] [cursor=pointer]
+        - text:  
+    - complementary [ref=e126]:
+      - generic [ref=e127]:
+        - generic [ref=e128]:
+          - heading "EKIO" [level=1] [ref=e129]
+          - paragraph [ref=e130]: Desenvolvimento Municipal
+        - navigation [ref=e131]:
+          - generic [ref=e132]:
+            - generic [ref=e133]: Painel
+            - link "Dashboard" [ref=e134] [cursor=pointer]:
+              - generic [ref=e135]: ◉
+          - generic [ref=e137]:
+            - generic [ref=e138]: Dados
+            - link "Baixar dados" [ref=e139] [cursor=pointer]:
+              - generic [ref=e140]: ⤓
+          - link "Sobre" [ref=e143] [cursor=pointer]:
+            - generic [ref=e144]: ⓘ
+        - generic [ref=e146]:
+          - generic [ref=e147]: Fonte
+          - generic [ref=e148]: IFDM 2025 · Base 2023
+    - button "Toggle sidebar" [expanded] [ref=e149] [cursor=pointer]
+    - separator "Resize sidebar":
+      - generic: Use arrow keys to resize the sidebar, Shift for larger steps, Home/End for min/max width.
+  - log [ref=e152]
+  - log [ref=e153]
+  - log [ref=e154]
+  - log [ref=e155]
+  - log [ref=e156]

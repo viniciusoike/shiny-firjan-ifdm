@@ -101,7 +101,26 @@ map_hdi <- function(
       tm_borders(col = EKIO_ORANGE, lwd = 2.5, zindex = 402)
   }
 
+  # tmap's view mode ignores tm_basemap(api = ), so the CARTO key goes in the
+  # URL template. A URL server drops the provider attribution; tm_credits()
+  # restores it.
+  carto_key <- Sys.getenv("CARTO_BASEMAP_SHINY")
+  if (nzchar(carto_key)) {
+    m <- m +
+      tm_basemap(
+        server = paste0(
+          "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+          "?key=",
+          carto_key
+        )
+      ) +
+      tm_credits(
+        "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors &copy; <a href='https://carto.com/attributions'>CARTO</a>"
+      )
+  } else {
+    m <- m + tm_basemap(server = "CartoDB.Positron")
+  }
+
   m +
-    tm_basemap(server = "CartoDB.Positron") +
     tm_view(set_view = c(coords_city, 10))
 }

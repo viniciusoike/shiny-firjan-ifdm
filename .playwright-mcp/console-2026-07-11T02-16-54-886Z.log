@@ -1,0 +1,12 @@
+[    2169ms] [LOG] Waiting for application to load ... @ https://viniciusoike.shinyapps.io/shiny-firjan-ifdm/:79
+[    2313ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://viniciusoike.shinyapps.io/favicon.ico:0
+[    2453ms] [LOG] Application not loaded. Retrying in 250ms @ https://viniciusoike.shinyapps.io/shiny-firjan-ifdm/:79
+[    2984ms] [LOG] Application not loaded. Retrying in 500ms @ https://viniciusoike.shinyapps.io/shiny-firjan-ifdm/:79
+[    3634ms] [LOG] Application loaded in 1467ms (2 checks). Reloading. @ https://viniciusoike.shinyapps.io/shiny-firjan-ifdm/:79
+[   15516ms] [LOG] Fri Jul 10 2026 23:17:10 GMT-0300 (Brasilia Standard Time) [INF]: Connection opened. https://viniciusoike.shinyapps.io/shiny-firjan-ifdm/ @ https://viniciusoike.shinyapps.io/shiny-firjan-ifdm/_w_ea45c1f0087d49bebb5860cd409d0f80/__assets__/shiny-server-client.min.js:0
+[   15516ms] [LOG] Fri Jul 10 2026 23:17:10 GMT-0300 (Brasilia Standard Time) [DBG]: Open channel 0 @ https://viniciusoike.shinyapps.io/shiny-firjan-ifdm/_w_ea45c1f0087d49bebb5860cd409d0f80/__assets__/shiny-server-client.min.js:0
+[   16667ms] [LOG] Fri Jul 10 2026 23:17:11 GMT-0300 (Brasilia Standard Time) [DBG]: 2 message(s) discarded from buffer @ https://viniciusoike.shinyapps.io/shiny-firjan-ifdm/_w_ea45c1f0087d49bebb5860cd409d0f80/__assets__/shiny-server-client.min.js:0
+[   17783ms] [LOG] Fri Jul 10 2026 23:17:12 GMT-0300 (Brasilia Standard Time) [DBG]: 1 message(s) discarded from buffer @ https://viniciusoike.shinyapps.io/shiny-firjan-ifdm/_w_ea45c1f0087d49bebb5860cd409d0f80/__assets__/shiny-server-client.min.js:0
+[   25617ms] [LOG] Fri Jul 10 2026 23:17:20 GMT-0300 (Brasilia Standard Time) [DBG]: 4 message(s) discarded from buffer @ https://viniciusoike.shinyapps.io/shiny-firjan-ifdm/_w_ea45c1f0087d49bebb5860cd409d0f80/__assets__/shiny-server-client.min.js:0
+[  315219ms] [LOG] Fri Jul 10 2026 23:22:10 GMT-0300 (Brasilia Standard Time) [DBG]: __extendsession__ succeeded @ https://viniciusoike.shinyapps.io/shiny-firjan-ifdm/_w_ea45c1f0087d49bebb5860cd409d0f80/__assets__/shiny-server-client.min.js:0
+[  615891ms] [LOG] Fri Jul 10 2026 23:27:10 GMT-0300 (Brasilia Standard Time) [DBG]: __extendsession__ succeeded @ https://viniciusoike.shinyapps.io/shiny-firjan-ifdm/_w_ea45c1f0087d49bebb5860cd409d0f80/__assets__/shiny-server-client.min.js:0
