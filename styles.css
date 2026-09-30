@@ -303,25 +303,26 @@ body {
   font-size: 12px;
 }
 
-/* Métrica radio styled as chips */
+/* Índice radio styled as chips. Shiny's inline radios render as
+   label.radio-inline > input + span. */
 .filter-chips .shiny-options-group {
   display: flex;
   gap: 4px;
 }
 
-.filter-chips .form-check-inline {
+/* Extra specificity beats bslib's padding for inline radios. */
+.filter-chips .shiny-options-group .radio-inline {
   margin: 0;
   padding: 0;
 }
 
-.filter-chips .form-check-input {
+.filter-chips input[type="radio"] {
   position: absolute;
   opacity: 0;
   pointer-events: none;
-  margin-top: 0;
 }
 
-.filter-chips .form-check-label {
+.filter-chips .radio-inline span {
   display: inline-block;
   font-size: 12px;
   padding: 5px 12px;
@@ -331,23 +332,22 @@ body {
   color: var(--ekio-gray-700);
   cursor: pointer;
   transition: all 0.15s;
-  vertical-align: middle;
   line-height: 1;
 }
 
-.filter-chips .form-check-label:hover {
+.filter-chips .radio-inline span:hover {
   border-color: var(--ekio-blue-400);
   color: var(--ekio-blue-700);
 }
 
-.filter-chips .form-check-input:checked+.form-check-label {
+.filter-chips input[type="radio"]:checked + span {
   background: var(--ekio-blue-700);
   border-color: var(--ekio-blue-700);
   color: var(--ekio-surface);
 }
 
-/* The radio is visually hidden; surface keyboard focus on its chip label. */
-.filter-chips .form-check-input:focus-visible+.form-check-label {
+/* The radio is visually hidden; surface keyboard focus on its chip. */
+.filter-chips input[type="radio"]:focus-visible + span {
   outline: 2px solid var(--ekio-blue-400);
   outline-offset: 1px;
 }
@@ -375,6 +375,12 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
+}
+
+.chart-card-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .chart-tag {

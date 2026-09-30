@@ -174,17 +174,6 @@ page_dashboard <- tagList(
         selected = 2023,
         width = "90px"
       )
-    ),
-    filter_group(
-      "Comparação",
-      style = "margin-left:auto;",
-      selectInput(
-        "geo",
-        NULL,
-        choices = c("Estado", "Região", "Brasil"),
-        selected = "Estado",
-        width = "120px"
-      )
     )
   ),
   uiOutput("kpi_grid"),
@@ -195,7 +184,21 @@ page_dashboard <- tagList(
       card_header(
         class = "chart-card-header",
         span(textOutput("map_title", inline = TRUE)),
-        map_options_popover
+        div(
+          class = "chart-card-controls",
+          filter_group(
+            NULL,
+            class = "filter-chips",
+            radioButtons(
+              "geo",
+              NULL,
+              inline = TRUE,
+              choices = c("Estado", "Região", "Brasil"),
+              selected = "Estado"
+            )
+          ),
+          map_options_popover
+        )
       ),
       card_body(
         class = "p-0",
