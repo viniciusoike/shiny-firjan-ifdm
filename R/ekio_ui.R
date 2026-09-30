@@ -128,23 +128,14 @@ page_header <- function(title, subtitle = NULL) {
   )
 }
 
-ekio_nav_item <- function(value, label, icon, active = FALSE) {
+ekio_nav_item <- function(value, label, active = FALSE) {
   shiny::tags$a(
     class = paste0("ekio-nav-item", if (active) " active" else ""),
     `data-value` = value,
     role = "link",
     tabindex = "0",
     `aria-current` = if (active) "page" else NULL,
-    shiny::tags$span(class = "nav-icon", `aria-hidden` = "true", icon),
     shiny::tags$span(label)
-  )
-}
-
-ekio_nav_section <- function(label, ...) {
-  shiny::div(
-    class = "ekio-nav-section",
-    if (!is.null(label)) shiny::div(class = "ekio-nav-label", label),
-    ...
   )
 }
 

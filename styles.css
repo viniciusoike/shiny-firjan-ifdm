@@ -44,9 +44,9 @@ body {
 }
 
 .ekio-brand h1 {
-  font-size: 22px;
+  font-size: 17px;
   font-weight: 700;
-  letter-spacing: 2px;
+  line-height: 1.25;
   color: var(--ekio-surface);
   margin: 0;
 }
@@ -54,35 +54,26 @@ body {
 .ekio-brand p {
   font-size: 11px;
   color: var(--ekio-gray-500);
-  margin: 4px 0 0;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
+  margin: 6px 0 0;
 }
 
 .ekio-nav {
   flex: 1;
-  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 16px 12px;
   overflow-y: auto;
 }
 
-.ekio-nav-section {
-  padding: 0 12px;
-  margin-bottom: 8px;
-}
-
-.ekio-nav-label {
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--ekio-gray-500);
-  padding: 8px 12px 4px;
+.ekio-nav-divider {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin: 10px 12px;
 }
 
 .ekio-nav-item {
   display: flex;
   align-items: center;
-  gap: 12px;
   padding: 10px 12px;
   border-radius: 6px;
   color: var(--ekio-gray-400);
@@ -108,15 +99,6 @@ body {
   outline-offset: -2px;
 }
 
-.ekio-nav-item .nav-icon {
-  width: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  flex-shrink: 0;
-}
-
 .ekio-sidebar-footer {
   padding: 16px 20px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
@@ -126,9 +108,7 @@ body {
 }
 
 .ekio-updated-label {
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-size: 10px;
+  font-size: 11px;
   color: var(--ekio-gray-600);
 }
 
@@ -139,11 +119,27 @@ body {
   color: var(--ekio-gray-300);
 }
 
+.ekio-credit {
+  display: block;
+  margin-top: 20px;
+  color: var(--ekio-gray-500);
+  text-decoration: none;
+}
+
+.ekio-credit:hover {
+  color: var(--ekio-gray-300);
+}
+
 .ekio-badge {
   display: block;
-  width: 120px;
+  width: 88px;
   height: auto;
-  margin-top: 16px;
+  margin-top: 6px;
+  opacity: 0.85;
+}
+
+.ekio-credit:hover .ekio-badge {
+  opacity: 1;
 }
 
 /* Page chrome ---------------------------------------------------------- */
@@ -307,25 +303,26 @@ body {
   font-size: 12px;
 }
 
-/* Métrica radio styled as chips */
+/* Índice radio styled as chips. Shiny's inline radios render as
+   label.radio-inline > input + span. */
 .filter-chips .shiny-options-group {
   display: flex;
   gap: 4px;
 }
 
-.filter-chips .form-check-inline {
+/* Extra specificity beats bslib's padding for inline radios. */
+.filter-chips .shiny-options-group .radio-inline {
   margin: 0;
   padding: 0;
 }
 
-.filter-chips .form-check-input {
+.filter-chips input[type="radio"] {
   position: absolute;
   opacity: 0;
   pointer-events: none;
-  margin-top: 0;
 }
 
-.filter-chips .form-check-label {
+.filter-chips .radio-inline span {
   display: inline-block;
   font-size: 12px;
   padding: 5px 12px;
@@ -335,23 +332,22 @@ body {
   color: var(--ekio-gray-700);
   cursor: pointer;
   transition: all 0.15s;
-  vertical-align: middle;
   line-height: 1;
 }
 
-.filter-chips .form-check-label:hover {
+.filter-chips .radio-inline span:hover {
   border-color: var(--ekio-blue-400);
   color: var(--ekio-blue-700);
 }
 
-.filter-chips .form-check-input:checked+.form-check-label {
+.filter-chips input[type="radio"]:checked + span {
   background: var(--ekio-blue-700);
   border-color: var(--ekio-blue-700);
   color: var(--ekio-surface);
 }
 
-/* The radio is visually hidden; surface keyboard focus on its chip label. */
-.filter-chips .form-check-input:focus-visible+.form-check-label {
+/* The radio is visually hidden; surface keyboard focus on its chip. */
+.filter-chips input[type="radio"]:focus-visible + span {
   outline: 2px solid var(--ekio-blue-400);
   outline-offset: 1px;
 }
@@ -379,6 +375,12 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
+}
+
+.chart-card-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .chart-tag {

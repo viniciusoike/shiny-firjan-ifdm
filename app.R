@@ -52,36 +52,30 @@ ekio_sidebar <- sidebar(
   class = "ekio-sidebar",
   div(
     class = "ekio-brand",
-    h1("EKIO"),
-    p("Desenvolvimento Municipal")
+    h1("Painel de Desenvolvimento dos Municípios (IFDM)"),
+    p("Firjan · 2013–2023")
   ),
   tags$nav(
     class = "ekio-nav",
-    ekio_nav_section(
-      "Painel",
-      ekio_nav_item("dashboard", "Dashboard", "◉", active = TRUE)
-    ),
-    ekio_nav_section(
-      "Dados",
-      ekio_nav_item("download_data", "Baixar dados", "⤓")
-    ),
-    ekio_nav_section(
-      NULL,
-      ekio_nav_item("about", "Sobre", "ⓘ")
-    )
+    ekio_nav_item("dashboard", "Painel", active = TRUE),
+    ekio_nav_item("download_data", "Baixar dados"),
+    div(class = "ekio-nav-divider"),
+    ekio_nav_item("about", "Sobre")
   ),
   div(
     class = "ekio-sidebar-footer",
     div(class = "ekio-updated-label", "Fonte"),
     div(class = "ekio-updated-date", "IFDM 2025 · Base 2023"),
     tags$a(
+      class = "ekio-credit",
       href = "https://ekio.io",
       target = "_blank",
       rel = "noopener",
+      span("Desenvolvido por"),
       tags$img(
         class = "ekio-badge",
-        src = "img/ekio-badge-developed-by.svg",
-        alt = "Desenvolvido por EKIO"
+        src = "img/ekio-logo-sidebar.svg",
+        alt = "EKIO"
       )
     )
   )
@@ -180,17 +174,6 @@ page_dashboard <- tagList(
         selected = 2023,
         width = "90px"
       )
-    ),
-    filter_group(
-      "Comparação",
-      style = "margin-left:auto;",
-      selectInput(
-        "geo",
-        NULL,
-        choices = c("Estado", "Região", "Brasil"),
-        selected = "Estado",
-        width = "120px"
-      )
     )
   ),
   uiOutput("kpi_grid"),
@@ -201,7 +184,21 @@ page_dashboard <- tagList(
       card_header(
         class = "chart-card-header",
         span(textOutput("map_title", inline = TRUE)),
-        map_options_popover
+        div(
+          class = "chart-card-controls",
+          filter_group(
+            NULL,
+            class = "filter-chips",
+            radioButtons(
+              "geo",
+              NULL,
+              inline = TRUE,
+              choices = c("Estado", "Região", "Brasil"),
+              selected = "Estado"
+            )
+          ),
+          map_options_popover
+        )
       ),
       card_body(
         class = "p-0",
@@ -328,7 +325,14 @@ page_about <- tagList(
     h3("Autor"),
     p(HTML(aboutme_pt_1)),
     p(HTML(aboutme_pt_2)),
+    p(HTML(
+      'Painel desenvolvido pela <a href="https://ekio.io" target="_blank" rel="noopener">EKIO</a>, consultoria de dados e economia.'
+    )),
     tags$ul(
+      tags$li(tags$a(
+        href = "https://ekio.io",
+        "EKIO"
+      )),
       tags$li(tags$a(
         href = "https://github.com/viniciusoike",
         "GitHub"
@@ -348,7 +352,7 @@ page_about <- tagList(
 # UI ---------------------------------------------------------------------------
 
 ui <- page_sidebar(
-  window_title = "Dashboard IFDM — EKIO",
+  window_title = "Painel IFDM — EKIO",
   theme = theme,
   fillable = FALSE,
   sidebar = ekio_sidebar,
