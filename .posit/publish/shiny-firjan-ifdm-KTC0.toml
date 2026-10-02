@@ -12,6 +12,8 @@ files = [
     "/styles.css",
     "/R/",
     "/data/",
+    "/www/",
+    "/fonts/",
     "/.posit/publish/shiny-firjan-ifdm-KTC0.toml",
     "/.posit/publish/deployments/deployment-7MNK.toml",
 ]

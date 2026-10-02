@@ -1,5 +1,4 @@
 library(tmap)
-library(tmaptools)
 library(ggplot2)
 library(echarts4r)
 library(dplyr)
@@ -19,7 +18,6 @@ firjan_full <- firjan_full |>
   dplyr::left_join(cities, by = "code_muni")
 
 id_muni <- readr::read_csv("data/id_muni.csv")
-shp_hdi <- dplyr::select(firjan_full, name_muni_full)
 
 state_border <- sf::st_read("data/shape_state_border.gpkg", quiet = TRUE)
 
