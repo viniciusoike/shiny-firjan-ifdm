@@ -1,13 +1,3 @@
-idhm_choices <- c("IDH", "IDH - Educação", "IDH - Renda", "IDH - Saúde")
-style_choices <- c("Básico", "Quantis", "Quebras Naturais", "Clusters")
-
-vl <- c(
-  "IDH" = "idhm",
-  "IDH - Educação" = "idhm_e",
-  "IDH - Renda" = "idhm_r",
-  "IDH - Saúde" = "idhm_s"
-)
-
 styles <- c(
   "Básico" = "pretty",
   "Quantis" = "quantile",
@@ -28,7 +18,6 @@ pals <- list(
   "EKIO (Vermelho–Azul)" = rev(ekioplot::ekio_pal("blue_red"))
 )
 
-text_about <- "O Índice FIRJAN de Desenvolvimento Municipal (IFDM) – é um indicador anual que mensura o desenvolvimento municipal em três eixos: Emprego & renda, Educação e Saúde. O IFDM utiliza várias bases públicas e tem uma metodologia similar a do IDH da ONU."
 text_classification <-
   "A leitura do IFDM é similar à do IDH.
    <ul>
@@ -107,35 +96,3 @@ doc_meta <- data.frame(
   ),
   stringsAsFactors = FALSE
 )
-
-#--------------------------------#
-
-classify_hdi <- function(x) {
-  stopifnot(is.numeric(x))
-
-  label <- dplyr::case_when(
-    x < 0.4 ~ "Baixo",
-    x >= 0.4 & x < 0.6 ~ "Regular",
-    x >= 0.6 & x < 0.8 ~ "Moderado",
-    x >= 0.8 ~ "Alto"
-  )
-
-  glue::glue("{round(x, 3)} ({label})")
-}
-
-prep_infobox <- function(city, hdi_year = 2023) {
-  new_names <- c("Educação", "Emprego & Renda", "Geral (IFDM)", "Saúde")
-  names(new_names) <- c("idhm_e", "idhm_r", "idhm", "idhm_s")
-
-  df <- series_data |>
-    dplyr::filter(name_muni_full == city, year == hdi_year) |>
-    tidyr::pivot_wider(
-      id_cols = "name_muni_full",
-      names_from = "index_type",
-      values_from = "hdi"
-    ) |>
-    dplyr::rename(dplyr::all_of(new_names)) |>
-    dplyr::mutate(dplyr::across(dplyr::where(is.numeric), classify_hdi))
-
-  return(df)
-}
