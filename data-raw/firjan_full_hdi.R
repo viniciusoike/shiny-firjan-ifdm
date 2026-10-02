@@ -20,13 +20,8 @@ firjan_wide_vals <- series |>
     values_from = "hdi"
   )
 
-# Geometry from the archived build (falls back to the live file if present)
-geom_src <- if (file.exists("data/_archive_2005_2016/firjan_wide.rds")) {
-  "data/_archive_2005_2016/firjan_wide.rds"
-} else {
-  "data/firjan_wide.rds"
-}
-shp <- readr::read_rds(geom_src) |>
+# Geometry from the current build
+shp <- readr::read_rds("data/firjan_wide.rds") |>
   select(code_muni, name_muni_full)
 
 wide_map <- shp |>
