@@ -21,7 +21,7 @@ color:
     green: ekio-green
     red: ekio-red
   foreground: "#191A1C"
-  background: "#F5F3F1"
+  background: "#F6F7F8"
   primary: ekio-blue
   secondary: ekio-teal
   success: ekio-green
