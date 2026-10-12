@@ -20,7 +20,7 @@ An interactive dashboard for Brazil's FIRJAN Municipal Development Index (IFDM),
 with a choropleth map, city-to-state benchmarks, and annual time series. Built
 with R Shiny. The app is in Portuguese.
 
-![Dashboard IFDM preview](docs/preview.png)
+![Painel principal do IFDM](docs/screenshots/ifdm-dashboard-overview.png)
 
 ## Features
 
