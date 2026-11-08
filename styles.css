@@ -53,7 +53,7 @@ body {
 
 .ekio-brand p {
   font-size: 11px;
-  color: var(--ekio-gray-500);
+  color: var(--ekio-gray-300);
   margin: 6px 0 0;
 }
 
@@ -109,7 +109,7 @@ body {
 
 .ekio-updated-label {
   font-size: 11px;
-  color: var(--ekio-gray-600);
+  color: var(--ekio-gray-300);
 }
 
 .ekio-updated-date {
@@ -122,12 +122,12 @@ body {
 .ekio-credit {
   display: block;
   margin-top: 20px;
-  color: var(--ekio-gray-500);
+  color: var(--ekio-gray-300);
   text-decoration: none;
 }
 
 .ekio-credit:hover {
-  color: var(--ekio-gray-300);
+  color: var(--ekio-surface);
 }
 
 .ekio-badge {
@@ -180,26 +180,25 @@ body {
   padding: 16px;
   box-shadow: var(--ekio-shadow-sm);
   border: 1px solid var(--ekio-gray-200);
-  position: relative;
-  overflow: hidden;
-}
-
-.kpi-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  /* Set per card from INDEX_HEX so the accent matches the plots. */
-  background: var(--kpi-accent, transparent);
 }
 
 .kpi-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: 12px;
   font-weight: 600;
   color: var(--ekio-gray-600);
   margin-bottom: 6px;
+}
+
+/* Set per card from INDEX_HEX so the swatch matches the plots. */
+.kpi-swatch {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--kpi-accent, transparent);
 }
 
 .kpi-value {
@@ -277,16 +276,47 @@ body {
   gap: 8px;
 }
 
-.filter-group>label {
+.filter-city {
+  width: 320px;
+}
+
+/* Each input renders its own label; lay label and control out in one row. */
+.filter-group .shiny-input-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 0;
+}
+
+.filter-city .shiny-input-container {
+  width: 100% !important;
+}
+
+/* The control wrapper takes the room the label leaves. */
+.filter-group .shiny-input-container > div {
+  flex: 1;
+  min-width: 0;
+}
+
+.filter-group .control-label {
   font-size: 12px;
   font-weight: 600;
   color: var(--ekio-gray-600);
   margin: 0;
+  white-space: nowrap;
 }
 
-.filter-bar .form-group,
-.filter-bar .shiny-input-container {
-  margin-bottom: 0;
+/* The map header has no room for a visible label; keep it for screen readers. */
+.filter-geo .control-label {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
 }
 
 .filter-bar .selectize-input {
@@ -350,6 +380,34 @@ body {
 .filter-chips input[type="radio"]:focus-visible + span {
   outline: 2px solid var(--ekio-blue-400);
   outline-offset: 1px;
+}
+
+@media (max-width: 575.98px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .kpi-card {
+    padding: 12px;
+  }
+
+  .filter-group,
+  .filter-city {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .filter-group .shiny-input-container {
+    width: 100% !important;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+  }
+
+  .filter-chips .shiny-options-group {
+    flex-wrap: wrap;
+  }
 }
 
 /* Cards ----------------------------------------------------------------- */
@@ -488,33 +546,6 @@ table.dataTable tbody tr.ranking-row-city>td:first-child {
 
 .about-content li {
   margin-bottom: 4px;
-}
-
-.about-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 12px;
-  margin: 12px 0 8px;
-  max-width: 800px;
-}
-
-.about-card {
-  background: var(--ekio-surface);
-  border: 1px solid var(--ekio-gray-300);
-  border-radius: var(--ekio-radius);
-  padding: 16px;
-}
-
-.about-card h4 {
-  font-size: 14px;
-  font-weight: 600;
-  margin: 0 0 6px;
-}
-
-.about-card p {
-  font-size: 13px;
-  color: var(--ekio-gray-700);
-  margin: 0;
 }
 
 /* Methodological notes (beside the KPIs) -------------------------------- */

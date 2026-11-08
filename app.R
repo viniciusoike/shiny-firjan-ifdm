@@ -44,6 +44,11 @@ KPI_INDICES <- list(
 
 YEARS <- 2023:2013
 
+# Portuguese labels for DT controls (search, pagination, info).
+DT_LANGUAGE_PT <- list(
+  url = "//cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json"
+)
+
 # Sidebar ----------------------------------------------------------------------
 
 ekio_sidebar <- sidebar(
@@ -139,13 +144,13 @@ page_dashboard <- tagList(
   div(
     class = "filter-bar",
     filter_group(
-      "Cidade",
+      class = "filter-city",
       selectizeInput(
         "city_sel",
-        NULL,
+        "Cidade",
         choices = city_list,
         selected = "São Paulo (SP)",
-        width = "260px",
+        width = "100%",
         options = list(
           placeholder = "Buscar município...",
           maxOptions = 25,
@@ -155,24 +160,22 @@ page_dashboard <- tagList(
       )
     ),
     filter_group(
-      "Índice",
       class = "filter-chips",
       radioButtons(
         "variable",
-        NULL,
+        "Índice",
         inline = TRUE,
         choices = INDEX_CHOICES,
         selected = "IDH"
       )
     ),
     filter_group(
-      "Ano",
       selectInput(
         "year_sel",
-        NULL,
+        "Ano",
         choices = YEARS,
         selected = 2023,
-        width = "90px"
+        width = "130px"
       )
     )
   ),
@@ -187,11 +190,10 @@ page_dashboard <- tagList(
         div(
           class = "chart-card-controls",
           filter_group(
-            NULL,
-            class = "filter-chips",
+            class = "filter-chips filter-geo",
             radioButtons(
               "geo",
-              NULL,
+              "Comparação",
               inline = TRUE,
               choices = c("Estado", "Região", "Brasil"),
               selected = "Estado"
@@ -211,8 +213,7 @@ page_dashboard <- tagList(
       full_screen = TRUE,
       card_header(
         class = "chart-card-header",
-        span(textOutput("ranking_title", inline = TRUE)),
-        span(class = "chart-tag", "ranking")
+        span(textOutput("ranking_title", inline = TRUE))
       ),
       card_body(DT::DTOutput("ranking_table"))
     )
@@ -234,12 +235,12 @@ page_dashboard <- tagList(
     col_widths = c(6, 6),
     chart_card(
       "Evolução dos indicadores",
-      "Série Histórica",
+      NULL,
       echarts4r::echarts4rOutput("plot_series", height = "320px")
     ),
     chart_card(
-      "Benchmark",
-      "Cidade × Brasil (média)",
+      "Município e média do Brasil",
+      NULL,
       navset_pill(
         nav_panel(
           "Geral",
@@ -269,8 +270,8 @@ page_download <- tagList(
   ),
   div(
     class = "filter-bar",
-    downloadButton("download", "Download (csv)", class = "btn-sm"),
-    downloadButton("download_xlsx", "Download (xlsx)", class = "btn-sm ms-2")
+    downloadButton("download", "Baixar CSV", class = "btn-sm"),
+    downloadButton("download_xlsx", "Baixar Excel", class = "btn-sm ms-2")
   ),
   chart_card(
     "Amostra dos dados",
@@ -294,27 +295,17 @@ page_download <- tagList(
 )
 
 page_about <- tagList(
-  page_header("Sobre", "Este painel, o IFDM e o autor."),
+  page_header("Sobre"),
   div(
     class = "about-content",
     h3("O painel"),
     p(HTML(about_app1)),
     p(HTML(about_app2)),
     h3("Sobre o IFDM"),
-    div(
-      class = "about-grid",
-      about_card(
-        "Três eixos",
-        "O IFDM mede o desenvolvimento municipal em Educação, Saúde e Emprego & Renda."
-      ),
-      about_card(
-        "Cobertura temporal",
-        "Série anual de 2013 a 2023, com metodologia revisada (IFDM 2025, ano-base 2023)."
-      ),
-      about_card(
-        "Produtor dos dados",
-        "Firjan (Índice Firjan de Desenvolvimento Municipal). Consultado pela última vez em 05/2026."
-      )
+    p(
+      "A Firjan publica o IFDM em série anual de 2013 a 2023, com metodologia",
+      "revisada na edição de 2025 (ano-base 2023). Os dados foram consultados",
+      "pela última vez em maio de 2026."
     ),
     h3("Classificação"),
     HTML(text_classification),
@@ -461,24 +452,7 @@ server <- function(input, output, session) {
       req(map_shp())
 
       fill_col <- get_map_variable(year(), input$variable)
-
-      popup_vars <- paste(
-        c("overall", "education", "income", "health"),
-        year(),
-        sep = "_"
-      )
-      names(popup_vars) <- c(
-        "IFDM",
-        "IFDM - Educação",
-        "IFDM - Emprego & Renda",
-        "IFDM - Saúde"
-      )
-
-      fill_scale <- tm_scale_intervals(
-        style = unname(styles[input$style]),
-        n = input$nbreaks,
-        values = pals[[input$palette]]
-      )
+      fill_scale <- ifdm_fill_scale(input$style, input$nbreaks, input$palette)
 
       lbl <- names(INDEX_CHOICES)[match(input$variable, INDEX_CHOICES)]
       title <- paste0(city(), " — ", lbl, " (", year(), ")")
@@ -494,7 +468,7 @@ server <- function(input, output, session) {
             col = EKIO_GRID,
             lwd = 0.5,
             id = "name_muni",
-            popup.vars = popup_vars,
+            popup = ifdm_popup(year()),
             zindex = 401
           )
       })
@@ -533,9 +507,7 @@ server <- function(input, output, session) {
       columnDefs = list(
         list(className = "dt-center", targets = c(0, 2))
       ),
-      language = list(
-        url = "//cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json"
-      )
+      language = DT_LANGUAGE_PT
     )
 
     if (!is.na(sel_pos)) {
@@ -586,7 +558,15 @@ server <- function(input, output, session) {
         value = fmt_ifdm(if (length(cur) == 1) cur else NA_real_),
         delta = ifdm_delta_lbl(delta),
         period = label_y,
-        spark_values = s$hdi,
+        spark_values = s$hdi[s$year <= year()],
+        spark_label = paste0(
+          "Evolução de ",
+          ix$label,
+          " de ",
+          min(s$year),
+          " a ",
+          year()
+        ),
         accent = INDEX_HEX[[ix$key]],
         dir = pp_dir(delta)
       )
@@ -601,7 +581,16 @@ server <- function(input, output, session) {
       req(city(), series_geo())
       plot_ranking(city(), year(), geo(), series_geo())
     },
-    res = 96
+    res = 96,
+    alt = reactive(paste0(
+      "Posição de ",
+      city(),
+      " no ranking de cada eixo do IFDM entre os municípios da comparação (",
+      geo(),
+      ", ",
+      year(),
+      ")."
+    ))
   )
 
   output$plot_histogram <- renderPlot(
@@ -609,7 +598,16 @@ server <- function(input, output, session) {
       req(city(), series_geo())
       plot_histogram(city(), year(), series_geo())
     },
-    res = 96
+    res = 96,
+    alt = reactive(paste0(
+      "Histograma do IFDM dos municípios da comparação (",
+      geo(),
+      ", ",
+      year(),
+      "), com a posição de ",
+      city(),
+      " destacada."
+    ))
   )
 
   df_series <- reactive({
@@ -650,7 +648,13 @@ server <- function(input, output, session) {
   })
 
   output$table_preview <- DT::renderDT({
-    DT::datatable(head(df_download(), 1000), options = list(pageLength = 10))
+    DT::datatable(
+      head(df_download(), 1000),
+      rownames = FALSE,
+      selection = "none",
+      options = list(pageLength = 10, language = DT_LANGUAGE_PT)
+    ) |>
+      DT::formatRound("ifdm", digits = 3, mark = ".", dec.mark = ",")
   })
 
   output$download <- downloadHandler(

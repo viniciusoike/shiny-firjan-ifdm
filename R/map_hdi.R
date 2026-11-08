@@ -43,6 +43,33 @@ get_state_border <- function(ctx, geo = "Região") {
   return(state)
 }
 
+# pt-BR numbers (decimal comma) for legend intervals and popups.
+IFDM_LABEL_FORMAT <- tm_label_format(
+  digits = 3,
+  big.mark = ".",
+  decimal.mark = ","
+)
+
+ifdm_popup <- function(year) {
+  tm_popup(
+    vars = stats::setNames(
+      paste(c("overall", "education", "income", "health"), year, sep = "_"),
+      c("IFDM", "IFDM - Educação", "IFDM - Emprego & Renda", "IFDM - Saúde")
+    ),
+    format = IFDM_LABEL_FORMAT
+  )
+}
+
+# Shared by map_hdi() and the tmapProxy() update in app.R.
+ifdm_fill_scale <- function(style, n, pal) {
+  tm_scale_intervals(
+    style = unname(styles[style]),
+    n = n,
+    values = pals[[pal]],
+    label.format = IFDM_LABEL_FORMAT
+  )
+}
+
 get_map_variable <- function(year, variable) {
   vl <- c(
     "IDH" = "overall",
@@ -75,36 +102,18 @@ map_hdi <- function(
 
   fill_col <- get_map_variable(year, variable)
 
-  popup_vars <- paste(
-    c("overall", "education", "income", "health"),
-    year,
-    sep = "_"
-  )
-  names(popup_vars) <- c(
-    "IFDM",
-    "IFDM - Educação",
-    "IFDM - Emprego & Renda",
-    "IFDM - Saúde"
-  )
-
   # tmap v4: scale + legend are objects passed to tm_polygons(); the visual
   # variable is `fill`, outlines are `col`, opacity is `fill_alpha`.
-  fill_scale <- tm_scale_intervals(
-    style = unname(styles[style]),
-    n = n,
-    values = pals[[pal]]
-  )
-
   m <- tm_shape(shp) +
     tm_polygons(
       fill = fill_col,
-      fill.scale = fill_scale,
+      fill.scale = ifdm_fill_scale(style, n, pal),
       fill.legend = tm_legend(title = title),
       fill_alpha = 0.7,
       col = EKIO_GRID,
       lwd = 0.5,
       id = "name_muni",
-      popup.vars = popup_vars,
+      popup = ifdm_popup(year),
       zindex = 401
     )
 
@@ -123,11 +132,18 @@ map_hdi <- function(
       tm_borders(col = EKIO_ORANGE, lwd = 2.5, zindex = 402)
   }
 
-  m +
+  m <- m +
     tm_basemap(server = CARTO_BASEMAP) +
     tm_credits(
       "© CARTO © OpenStreetMap contributors",
       position = c("right", "bottom")
-    ) +
-    tm_view(set_view = c(coords_city, 10))
+    )
+
+  # The state view centres on the city. Region and country views keep tmap's
+  # default, which fits the map to the whole comparison area.
+  if (geo == "Estado") {
+    m <- m + tm_view(set_view = c(coords_city, 10))
+  }
+
+  m
 }

@@ -42,7 +42,19 @@ plot_series <- function(df) {
     dplyr::group_by(index_type) |>
     echarts4r::e_charts(year) |>
     echarts4r::e_line(hdi, symbolSize = 7) |>
-    e_ekio(palette = cols) |>
+    e_ekio(
+      palette = cols,
+      description = paste0(
+        "Gráfico de linhas com a evolução do IFDM geral e dos eixos Educação, ",
+        "Saúde e Emprego & Renda de ",
+        df$name_muni_full[1],
+        ", de ",
+        min(df$year),
+        " a ",
+        max(df$year),
+        "."
+      )
+    ) |>
     echarts4r::e_tooltip(
       trigger = "axis",
       valueFormatter = .ifdm_value_fmt
@@ -70,7 +82,20 @@ plot_benchmark <- function(df, index_label) {
     dplyr::group_by(name_muni_full) |>
     echarts4r::e_charts(year) |>
     echarts4r::e_line(hdi, symbolSize = 6) |>
-    e_ekio(palette = BENCH_PAL, y_min = 0, y_max = 1) |>
+    e_ekio(
+      palette = BENCH_PAL,
+      y_min = 0,
+      y_max = 1,
+      description = paste0(
+        "Gráfico de linhas que compara o índice ",
+        index_label,
+        " de ",
+        city_name,
+        " com a ",
+        sub("^Média ", "média do ", bench_name),
+        " ao longo dos anos."
+      )
+    ) |>
     echarts4r::e_tooltip(
       trigger = "axis",
       valueFormatter = .ifdm_value_fmt

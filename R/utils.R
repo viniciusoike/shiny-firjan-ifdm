@@ -28,9 +28,10 @@ text_classification <-
    </ul>"
 
 text_use <- "Comece pelo município. A lista vem ordenada por população, mas
-você pode digitar o nome e usar o autocomplete. Os filtros de índice, ano e
-comparação mudam tanto o mapa como os gráficos abaixo.<br><br>Os mapas de
-Cluster e de Quebras Naturais levam mais tempo para carregar."
+você pode digitar o nome e usar o autocomplete. O ano muda os indicadores, o
+mapa e os rankings. O índice selecionado altera o mapa e a tabela de ranking.
+As séries mostram todos os anos disponíveis.<br><br>Os mapas de Cluster e de
+Quebras Naturais levam mais tempo para carregar."
 
 text_methods <- "
 <p>
@@ -52,10 +53,9 @@ about_app1 <-
   "Este painel analisa os municípios brasileiros com os dados do Índice Firjan de Desenvolvimento Municipal (IFDM). O IFDM segue metodologia parecida com a do Índice de Desenvolvimento Humano (IDH) da ONU e tem duas vantagens sobre ele. Primeiro, cobre as mesmas dimensões (educação, saúde e renda) com um número maior de variáveis. Segundo, sai todo ano, enquanto o IDH municipal sai uma vez a cada dez anos."
 
 about_app2 <- "Quanto maior o IFDM, melhor. O mapa mostra a cidade escolhida
-ao lado dos demais municípios do seu estado. O filtro 'Comparação', no topo da
-página, troca esse recorte para região ou Brasil; os recortes maiores levam
-mais tempo para carregar. Os quatro gráficos abaixo do mapa contextualizam o
-IFDM da cidade."
+ao lado dos demais municípios do seu estado. As opções Estado, Região e Brasil,
+no cabeçalho do mapa, definem o recorte do mapa, da distribuição e dos
+rankings. Os recortes maiores levam mais tempo para carregar."
 
 
 # Download page documentation ----
