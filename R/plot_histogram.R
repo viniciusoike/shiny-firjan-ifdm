@@ -25,20 +25,21 @@ plot_histogram <- function(
       linewidth = 0.5,
       color = EKIO_INK
     ) +
-    scale_x_continuous(breaks = seq(0.1, 1, 0.1)) +
+    scale_x_continuous(breaks = seq(0.2, 1, 0.2)) +
     scale_y_continuous(expand = expansion(c(0, 0.1))) +
     scale_fill_manual(values = INDEX_PAL_LABELLED) +
     guides(fill = "none") +
     facet_wrap(vars(index_type)) +
     labs(
-      subtitle = "Linha tracejada: município selecionado.",
       x = "IFDM",
-      y = "Contagem"
+      y = NULL,
+      caption = "Linha tracejada: município selecionado."
     ) +
     theme_ekio(base_size = 12, background = EKIO_PLOT_BG) +
     theme(
       panel.grid.major.x = element_blank(),
       panel.grid.minor.x = element_blank(),
+      panel.spacing.x = unit(1.5, "lines"),
       strip.text = element_text(size = 11, face = "bold", color = EKIO_SURFACE)
     )
 }
