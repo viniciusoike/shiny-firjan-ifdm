@@ -80,6 +80,7 @@ plot_ranking <- function(city, year, geo, series_geo) {
       nudge_y = 0.3
     ) +
     scale_x_reverse() +
+    scale_y_discrete(limits = rev) +
     scale_fill_manual(values = INDEX_PAL_LABELLED) +
     guides(fill = "none") +
     labs(
@@ -89,6 +90,7 @@ plot_ranking <- function(city, year, geo, series_geo) {
     ) +
     theme_ekio(base_size = 12, background = EKIO_PLOT_BG) +
     theme(
+      axis.text.y = element_text(hjust = 1),
       panel.grid.major.y = element_blank(),
       panel.grid.major.x = element_line(
         linewidth = 0.5,

@@ -222,12 +222,12 @@ page_dashboard <- tagList(
     chart_card(
       "Distribuição do IFDM",
       "Municípios da comparação, por faixa",
-      plotOutput("plot_histogram", height = "320px")
+      plotOutput("plot_histogram", height = "360px")
     ),
     chart_card(
       "Ranking",
       "Posição da cidade em cada eixo",
-      plotOutput("plot_ranking", height = "320px")
+      plotOutput("plot_ranking", height = "360px")
     )
   ),
   layout_columns(
