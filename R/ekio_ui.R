@@ -71,6 +71,11 @@ EKIO_GRID <- unname(.ekio_gray[2])
 
 ## echarts4r theme ---------------------------------------------------------
 
+# pt-BR axis labels (decimal comma), matching the KPIs and tables.
+.ptbr_axis_fmt <- htmlwidgets::JS(
+  "function(v){return v.toLocaleString('pt-BR', {maximumFractionDigits: 3});}"
+)
+
 # EKIO styling for echarts4r widgets — the echarts counterpart to theme_ekio().
 # Applies the brand colour palette (positional, so series order must match),
 # muted axes, dashed grey split lines, and the brand font stack. Fonts are
@@ -81,10 +86,16 @@ e_ekio <- function(
   y_name = NULL,
   legend = TRUE,
   y_min = NULL,
-  y_max = NULL
+  y_max = NULL,
+  description = NULL
 ) {
   e |>
     echarts4r::e_color(unname(palette), background = EKIO_PLOT_BG) |>
+    # Screen readers read the canvas through ECharts' aria description.
+    echarts4r::e_aria(
+      enabled = TRUE,
+      label = list(enabled = TRUE, description = description)
+    ) |>
     echarts4r::e_grid(top = 48, bottom = 36, left = 52, right = 20) |>
     echarts4r::e_x_axis(
       # `scale` fits the axis to the data extent; without it a value axis forces
@@ -104,7 +115,7 @@ e_ekio <- function(
       nameTextStyle = list(color = EKIO_MUTED, align = "left"),
       axisLine = list(show = FALSE),
       axisTick = list(show = FALSE),
-      axisLabel = list(color = EKIO_MUTED),
+      axisLabel = list(color = EKIO_MUTED, formatter = .ptbr_axis_fmt),
       splitLine = list(
         show = TRUE,
         lineStyle = list(color = EKIO_GRID, type = "dashed")
@@ -139,11 +150,11 @@ ekio_nav_item <- function(value, label, active = FALSE) {
   )
 }
 
-filter_group <- function(label, ..., class = NULL, style = NULL) {
+# Inputs inside a filter group carry their own <label>, so screen readers name
+# each control; styles.css lays the label out inline.
+filter_group <- function(..., class = NULL) {
   shiny::div(
     class = paste(c("filter-group", class), collapse = " "),
-    style = style,
-    if (!is.null(label)) shiny::tags$label(label),
     ...
   )
 }
@@ -157,14 +168,6 @@ chart_card <- function(title, tag = NULL, ..., full_screen = TRUE) {
       if (!is.null(tag)) shiny::span(class = "chart-tag", tag)
     ),
     ...
-  )
-}
-
-about_card <- function(title, text) {
-  shiny::div(
-    class = "about-card",
-    shiny::h4(title),
-    shiny::p(text)
   )
 }
 
@@ -198,7 +201,7 @@ pp_dir <- function(d) {
 
 ## KPI cards (Panorama) ----------------------------------------------------
 
-kpi_sparkline <- function(values, n = 12) {
+kpi_sparkline <- function(values, label = NULL, n = 12) {
   v <- utils::tail(values[!is.na(values)], n)
   if (length(v) < 2) {
     return(NULL)
@@ -208,6 +211,8 @@ kpi_sparkline <- function(values, n = 12) {
   heights <- 3 + (v - rng[1]) / span * 97
   shiny::div(
     class = "kpi-sparkline",
+    role = "img",
+    `aria-label` = label,
     lapply(heights, function(h) {
       shiny::div(class = "bar", style = sprintf("height:%.0f%%", h))
     })
@@ -220,19 +225,24 @@ kpi_card <- function(
   delta,
   period,
   spark_values,
+  spark_label = NULL,
   accent = EKIO_NAVY,
   dir = "neutral"
 ) {
   shiny::div(
     class = "kpi-card",
     style = paste0("--kpi-accent:", accent),
-    shiny::div(class = "kpi-label", label),
+    shiny::div(
+      class = "kpi-label",
+      shiny::span(class = "kpi-swatch", `aria-hidden` = "true"),
+      label
+    ),
     shiny::div(class = "kpi-value", value),
     shiny::div(
       class = "kpi-meta",
       shiny::span(class = paste("kpi-delta", dir), delta),
       shiny::span(class = "kpi-period", paste("·", period))
     ),
-    kpi_sparkline(spark_values)
+    kpi_sparkline(spark_values, spark_label)
   )
 }
